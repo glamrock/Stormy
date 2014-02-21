@@ -98,7 +98,7 @@ echo ''
     echo '1. Install dependencies Ubuntu 12.04 and above'
     echo '2. Install dependencies for Debian'
     echo '3. Install Ghost'
-    echo '4. Finish'
+    echo '4. Finish and Exit'
     echo '5. View instructions'
 #    echo '6. Install Tor (if not using Tails)'
     echo '9. Exit without installing anything'
@@ -115,9 +115,9 @@ if [ $INPUT -eq 1 ]; then
     sudo apt-get install python python-dev python-software-properties -y -qq
 
 # NODE
-    sudo apt-get install g++ make nodejs
+    sudo apt-get install g++ make nodejs -y -qq
     sudo apt-get update -y -qq
-    sudo apt-get install npm
+    sudo apt-get install npm -y -qq
     sudo npm install forever -y
 
 # Double-check for broken deps before finishing up
@@ -138,9 +138,9 @@ elif [ $INPUT -eq 2 ]; then
     apt-get install python python-dev python-software-properties -y -qq
 
 # NODE
-    apt-get install g++ make nodejs
+    apt-get install g++ make nodejs -y -qq
     apt-get update -y -qq
-    apt-get install npm
+    apt-get install npm -y -qq
     npm install forever -y
     
 # Double-check for broken deps before finishing up
@@ -165,22 +165,7 @@ elif [ $INPUT -eq 3]; then
 #----- Cleanup and Exit -----#
 elif [ $INPUT -eq 4 ]; then
 
-#kick them over to lastclean
-    lastclean
 
-# Return
-# elif [ $INPUT -eq 9 ]; then
-#    clear && main
-
-elif [ $INPUT -eq 9 ]; then
-    clear && end
-fi
-}
-
-
-
-# CLEANUP SYSTEM
-function lastclean {
 clear
 echo ''
 echo 'Finishing up!'
@@ -206,9 +191,19 @@ clear
 # exit
 
 logout
+
+
+# Return
+# elif [ $INPUT -eq 9 ]; then
+#    clear && main
+
+elif [ $INPUT -eq 9 ]; then
+    clear && end
+fi
 }
 
-#logout dialogue
+
+#----- Logout Dialogue -----#
 
 function logout {
     echo 'Please reboot if possible. Ghost will start automatically.'
