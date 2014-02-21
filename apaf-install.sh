@@ -11,13 +11,13 @@
 #   GPL v3, a supervillain-friendly license.
 # 
 
-
-echo '8""""8'
-echo '8    " e   e eeeee eeeee eeeee'
-echo '8e     8   8 8  88 8   "   8'
-echo '88  ee 8eee8 8   8 8eeee   8e'
-echo '88   8 88  8 8   8    88   88'
-echo '88eee8 88  8 8eee8 8ee88   88'
+echo "  :::::::::::::::::::  :::::::::"
+echo "     :+:   :+:    :+: :+:    :+: "
+echo "    +:+   +:+    +:+ +:+    +:+  "
+echo "   +#+   +#+    +:+ +#++:++#:    "
+echo "  +#+   +#+    +#+ +#+    +#+    "
+echo " #+#   #+#    #+# #+#    #+#     "
+echo "###    ########  ###    ###      "
 
 #----- FUNCTIONS -----#
 
