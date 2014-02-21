@@ -42,7 +42,6 @@ function domino {
         fi
     fi
 
-
 # Now move to "erpdert" function
 erpdert
 }
@@ -66,18 +65,22 @@ function addsource {
         sudo add-apt-repository ppa:chris-lea/node.js -y -qq
         sudo apt-get update -y -qq
         echo 'Done.'
-    fi
 
 # Detect if Debian
 
-    if [[ `lsb_release -is` == "Debian" ]]
+    elif [[ `lsb_release -is` == "Debian" ]]
         echo 'Adding software sources'
         apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 136221EE520DDFAF0A905689B9316A7BC7917B12
         cp /etc/apt/sources.list /etc/apt/sources.list.original
-        echo "deb http://ppa.launchpad.net/chris-lea/node.js/ubuntu lucid main" | sudo tee -a /etc/apt/sources.list
+        echo "deb http://ppa.launchpad.net/chris-lea/node.js/ubuntu lucid main" | tee -a /etc/apt/sources.list
         echo "deb-src http://ppa.launchpad.net/chris-lea/node.js/ubuntu lucid main" | sudo tee -a /etc/apt/sources.list
-        sudo apt-get update -y -qq
+        apt-get update -y -qq
         echo 'Done.'
+
+# Detect Wat
+    else
+        echo 'Sorry, this script is just for Ubuntu or Debian systems!'
+        exit
     fi
 
 installmenu
@@ -147,7 +150,6 @@ elif [ $INPUT -eq 2 ]; then
 # Debian users are less nervous than Ubuntu users, but still.
     echo 'Dependencies installed!'
 
-
 #kick back to menu
     installmenu
 
@@ -157,6 +159,7 @@ elif [ $INPUT -eq 3]; then
     wget -O ghost.zip https://ghost.org/zip/ghost-latest.zip
     unzip -d ghost ghost.zip
     cd ghost
+    npm install --production #this installs Ghost
     
 
 #----- Cleanup and Exit -----#
