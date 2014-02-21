@@ -118,7 +118,7 @@ if [ $INPUT -eq 1 ]; then
     sudo apt-get install g++ make nodejs -y -qq
     sudo apt-get update -y -qq
     sudo apt-get install npm -y -qq
-    sudo npm install forever -y
+    sudo npm install forever -g
 
 # Double-check for broken deps before finishing up
     sudo apt-get check -y -qq
@@ -141,7 +141,7 @@ elif [ $INPUT -eq 2 ]; then
     apt-get install g++ make nodejs -y -qq
     apt-get update -y -qq
     apt-get install npm -y -qq
-    npm install forever -y
+    npm install forever -g
     
 # Double-check for broken deps before finishing up
     echo 'Checking integrity...'
