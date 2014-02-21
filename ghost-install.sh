@@ -9,8 +9,6 @@
 #
 # Legal Stuff:
 #   GPL v3, a supervillain-friendly license.
-# 
-
 
 echo '8""""8'
 echo '8    " e   e eeeee eeeee eeeee'
@@ -18,15 +16,7 @@ echo '8e     8   8 8  88 8   "   8'
 echo '88  ee 8eee8 8   8 8eeee   8e'
 echo '88   8 88  8 8   8    88   88'
 echo '88eee8 88  8 8eee8 8ee88   88'
-
-#----- CHECK IF ROOT [commented out for now] -----#
-#ROOT_UID="0"
-
-#if [ "$UID" -ne "$ROOT_UID" ] ; then
-#	echo "This install script should be run as root. (aka administrator)"
-#	exit 1
-#fi
-
+sleep 1
 
 #----- FUNCTIONS -----#
 
@@ -36,26 +26,65 @@ domino
 # CLEAN ENVIRONMENT FIRST
 function domino {
 # Empty various cache files
-echo 'Preparing workspace'
-echo 'Requires administrator privileges:'
-sudo apt-get autoclean
+    echo 'Preparing workspace'
 
-# Now move to "addsource"
+# CHECK IF ROOT
+    ROOT_UID="0"
+
+    if [ "$UID" -ne "$ROOT_UID" ] ; then
+        echo 'Requires administrator privileges:'
+
+        if [[ `lsb_release -is` == "Ubuntu" ]]
+            sudo apt-get autoclean
+        elif [[ `lsb_release -is` == "Debian" ]]
+            su -
+            apt-get autoclean
+        fi
+    fi
+
+
+# Now move to "erpdert" function
+erpdert
+}
+
+#----- RUN UPDATES -----#
+
+function erpdert {
+    sudo apt-get update -y -qq
+    sudo apt-get upgrade -y -qq
+
 addsource
 }
 
-# ADD SOFTWARE SOURCES
+#----- ADD SOFTWARE SOURCES -----#
 function addsource {
 # Adds sources for various Ghost dependencies
-echo 'Adding software sources'
-# echo 'Requires root privileges:'
-#sudo add-apt-repository ppa:gnome3-team/gnome3 -y
-echo 'Done.'
-ghostinstall
+
+# Detect if Ubuntu
+    if [[ `lsb_release -is` == "Ubuntu" ]]
+        echo 'Adding software sources'
+        sudo add-apt-repository ppa:chris-lea/node.js -y -qq
+        sudo apt-get update -y -qq
+        echo 'Done.'
+    fi
+
+# Detect if Debian
+
+    if [[ `lsb_release -is` == "Debian" ]]
+        echo 'Adding software sources'
+        apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 136221EE520DDFAF0A905689B9316A7BC7917B12
+        cp /etc/apt/sources.list /etc/apt/sources.list.original
+        echo "deb http://ppa.launchpad.net/chris-lea/node.js/ubuntu lucid main" | sudo tee -a /etc/apt/sources.list
+        echo "deb-src http://ppa.launchpad.net/chris-lea/node.js/ubuntu lucid main" | sudo tee -a /etc/apt/sources.list
+        sudo apt-get update -y -qq
+        echo 'Done.'
+    fi
+
+installmenu
 }
 
-# INSTALL SELECTION
-function ghostinstall {
+#----- INSTALL SELECTION / MENU -----#
+function installmenu {
 INPUT=0
 echo ''
 echo 'MAIN MENU'
@@ -63,54 +92,78 @@ echo 'What would you like to do? (Enter the number of your choice)'
 echo ''
 #while [ true ]
 #do
-echo '1. Install dependencies Ubuntu 12.04 and above'
-echo '2. Install dependencies for Debian'
-echo '3. Install Ghost'
-echo '4. Set up Tor'
-echo '5. View instructions'
-echo '9. Exit without installing anything'
-read INPUT
-# Install dependencies for Ubuntu 12.04, Mint, or Backtrack/Kali
+    echo '1. Install dependencies Ubuntu 12.04 and above'
+    echo '2. Install dependencies for Debian'
+    echo '3. Install Ghost'
+    echo '4. Finish'
+    echo '5. View instructions'
+#    echo '6. Install Tor (if not using Tails)'
+    echo '9. Exit without installing anything'
+
+    read INPUT
+
+#----- Install dependencies for Ubuntu 12.04, Mint, or Backtrack/Kali ----#
 if [ $INPUT -eq 1 ]; then
     echo 'Installing dependencies...'
-    sudo apt-get build-dep gnome -y -qq
-	sudo apt-get build-dep gnome-shell-extensions-common pyjavaproperties python-networkmanager -y -qq
-	sudo apt-get install gnome gnome-shell-extensions-common pyjavaproperties python-networkmanager -y -qq
-	sudo apt-get build-dep olsrd -y -qq
-	sudo apt-get install olsrd -y -qq
-	sudo apt-get build-dep nm-dispatcher-olsrd -y -qq
-	sudo apt-get install nm-dispatcher-olsrd -y -qq
-	sudo apt-get build-dep ahcpd -y -qq
-	sudo apt-get install ahcpd -y -qq
+
+# PYTHON
+    sudo apt-get build-dep python-defaults -y -qq
+    sudo apt-get update -y -qq
+    sudo apt-get install python python-dev python-software-properties -y -qq
+
+# NODE
+    sudo apt-get install g++ make nodejs
+    sudo apt-get update -y -qq
+    sudo apt-get install npm
+    sudo npm install forever -y
+
 # Double-check for broken deps before finishing up
-	sudo apt-get check -y -qq
-	sudo apt-get build-dep commotion-mesh-applet -y -qq
-	sudo apt-get install commotion-mesh-applet -y -qq
-    echo 'Installed!'
+    sudo apt-get check -y -qq
 
-#kick over to lastclean
-	lastclean
+# Comfort for nervous users
+    echo 'Dependencies installed!'
 
-# Install Dependencies for Debian
+#kick back to menu
+    installmenu
+
+#----- Install Dependencies for Debian -----#
 elif [ $INPUT -eq 2 ]; then
     echo 'Installing dependencies...'
-    sudo apt-get build-dep gnome -y -qq
-	sudo apt-get build-dep gnome-shell-extensions-common pyjavaproperties python-networkmanager -y -qq
-	sudo apt-get install gnome gnome-shell-extensions-common pyjavaproperties python-networkmanager -y -qq
-	sudo apt-get build-dep olsrd -y -qq
-	sudo apt-get install olsrd -y -qq
-	sudo apt-get build-dep nm-dispatcher-olsrd -y -qq
-	sudo apt-get install nm-dispatcher-olsrd -y -qq
-	sudo apt-get build-dep ahcpd -y -qq
-	sudo apt-get install ahcpd -y -qq
-# Double-check for broken deps before finishing up
-	sudo apt-get check -y -qq
-	sudo apt-get build-dep commotion-mesh-applet -y -qq
-	sudo apt-get install commotion-mesh-applet -y -qq
-    echo 'Installed!'
+    su -
+    apt-get build-dep python-defaults -y -qq
+    apt-get update -y -qq
+    apt-get install python python-dev python-software-properties -y -qq
 
-#kick over to lastclean
-	lastclean
+# NODE
+    apt-get install g++ make nodejs
+    apt-get update -y -qq
+    apt-get install npm
+    npm install forever -y
+    
+# Double-check for broken deps before finishing up
+    echo 'Checking integrity...'
+    apt-get check -y -qq
+
+# Debian users are less nervous than Ubuntu users, but still.
+    echo 'Dependencies installed!'
+
+
+#kick back to menu
+    installmenu
+
+#----- Install Ghost -----#
+elif [ $INPUT -eq 3]; then
+    cd /var/www
+    wget -O ghost.zip https://ghost.org/zip/ghost-latest.zip
+    unzip -d ghost ghost.zip
+    cd ghost
+    
+
+#----- Cleanup and Exit -----#
+elif [ $INPUT -eq 4 ]; then
+
+#kick them over to lastclean
+    lastclean
 
 # Return
 # elif [ $INPUT -eq 9 ]; then
@@ -118,9 +171,9 @@ elif [ $INPUT -eq 2 ]; then
 
 elif [ $INPUT -eq 9 ]; then
     clear && end
-
 fi
 }
+
 
 
 # CLEANUP SYSTEM
@@ -140,43 +193,44 @@ sudo apt-get autoremove -y -qq
 echo 'Cleaning up temporary cache...'
 sudo apt-get clean -y -qq
 echo 'Done.'
-sleep 3
+sleep 5
 
 clear
 
-echo 'Please restart your session to complete installation.'
+# echo 'Please restart your session to complete installation.'
 
 # Send back to command prompt
 # exit
 
 logout
-
 }
 
 #logout dialogue
 
 function logout {
-echo ''
-read -p "(O)kay! / (N)o, I'll log off later."
+    echo 'Please reboot if possible. Ghost will start automatically.'
+    read -p "(O)kay! / (I) can't yet."
 
 if [ '$REPLY' == 'o' ]; then
-	sudo gnome-session-save --logout
-else
-	echo 'Please log out to complete Commotion configuration.'
-	exit
+    sudo shutdown -r +1 "Rebooting!"
 
+elif [ '$REPLY' == 'O' ]; then
+    sudo shutdown -r +1 "Rebooting!"
+else
+    echo 'Please reboot your system when possible. Remember, Ghost will start automatically whenever the system starts.'
+    exit
 fi
 }
 
 # Exit dialogue
 function end {
-echo ''
-read -p 'Are you sure you want to quit? (Y)es/(n)o '
-if [ '$REPLY' == 'n' ]; then
-    clear && appinstall
-else
-    clear && exit
-fi
+    echo ''
+    read -p 'Are you sure you want to quit? (Y)es/(n)o '
+    if [ '$REPLY' == 'n' ]; then
+        clear && installmenu
+    else
+        clear && exit
+    fi
 }
 
 ## END OF TRANSMISSION ##
