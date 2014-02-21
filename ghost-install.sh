@@ -160,7 +160,10 @@ elif [ $INPUT -eq 3]; then
     unzip -d ghost ghost.zip
     cd ghost
     npm install --production #this installs Ghost
-    
+
+    # Start Ghost
+    NODE_ENV=production forever --minUptime=100ms --spinSleepTime=3000ms start index.js -e error.log
+
 
 #----- Cleanup and Exit -----#
 elif [ $INPUT -eq 4 ]; then
