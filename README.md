@@ -9,7 +9,7 @@ Stormy
 * Follow the instructions to either install or exit the script
 * If installed, reboot your instance (script should give you this option).
 
-Once your hidden service is set up, go to your onion address. `xxxx.onion/ghost/` should ask you to set up a name and password for your blog. Do so now. Periodic backups of the sqlite backups will get sent to `/home`.
+Once your hidden service is set up, go to your onion address. `xxxx.onion/ghost/` should ask you to set up a name and password for your blog. Do so now. Periodic backups of the sqlite backups will get sent to `/home/tor`.
 
 This is a work in progress, having begun at Tor's Winter Dev Meeting 2014. Treat all code as if I'm insane. Always create hidden services on *their own machine*. ***Always***.
 
