@@ -13,6 +13,6 @@ Once your hidden service is set up, go to your onion address. `xxxx.onion/ghost/
 
 This is a work in progress, having begun at Tor's Winter Dev Meeting 2014. Treat all code as if I'm insane. Always create hidden services on *their own machine*. ***Always***.
 
-All code is licensed under GPL, a supervillain-friendly license. I'm still working on the [http://www.youtube.com/watch?v=IGqwqxRF598](evil laugh).
+All code is licensed under GPL, a supervillain-friendly license. I'm still working on the [evil laugh](http://www.youtube.com/watch?v=IGqwqxRF598).
 
 ![Ignore Me!](http://i.imgur.com/1xV099o.jpg)
