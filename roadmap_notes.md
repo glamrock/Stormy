@@ -22,6 +22,10 @@ Create separate script for just installing the Tor Hidden Service (non-ghost)
         Key select
     Output 
 
-Unrelated / Semi-related 
+Unrelated / Semi-related / Maybe related but only if you're me?
 
 At some point, make a BSD vm to get a shallot
+Is it possible to save users from themselves?
+Detect apache/php, and if so, exit script?
+Harden their platform for them?
+
