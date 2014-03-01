@@ -49,6 +49,7 @@ erpdert
 #----- RUN UPDATES -----#
 
 function erpdert {
+    echo 'Running updates'
     sudo apt-get update -y -qq
     sudo apt-get upgrade -y -qq
 
