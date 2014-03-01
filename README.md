@@ -5,13 +5,13 @@ Stormy
 
 **To test:**
 * ssh into your server
-* `git clone https://github.com/glamrock/Stormy.git && cd Stormy && ./ghost-install.sh`
-* Follow the instructions to either install or exit the script
-* If installed, reboot your instance (script should give you this option).
-
-**Reminder:** Always create hidden services on *their own machine*. ***Always***.
+* Enter this command: `git clone https://github.com/glamrock/Stormy.git && cd Stormy && ./ghost-install.sh`
+* Follow the instructions to either install or exit the script.
+* Your instance will reboot automatically after install.
 
 Once your hidden service is set up, go to your onion address. `xxxx.onion/ghost/` should ask you to set up a name and password for your blog. Do so now. Periodic backups of the sqlite backups will get sent to `/home/tor`.
+
+**Reminder:** Always create hidden services on *their own machine*. ***Always***.
 
 This is a work in progress, having begun at Tor's Winter Dev Meeting 2014. Treat all code as if I'm insane.
 

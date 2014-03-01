@@ -80,6 +80,8 @@ function addsource {
 # Detect Wat
     else
         echo 'Sorry, this script is just for Ubuntu or Debian systems!'
+        echo 'Using another OS? Send a request to griffin@torproject.org'
+        echo 'https://github.com/glamrock/stormy'
         exit
     fi
 
@@ -164,10 +166,8 @@ elif [ $INPUT -eq 3]; then
     # Start Ghost
     NODE_ENV=production forever --minUptime=100ms --spinSleepTime=3000ms start index.js -e error.log
 
-
 #----- Cleanup and Exit -----#
 elif [ $INPUT -eq 4 ]; then
-
 
 clear
 echo ''
