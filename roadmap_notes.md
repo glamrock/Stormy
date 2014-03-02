@@ -1,23 +1,23 @@
-##Ghost
+###Ghost
 
 * init.d script to ensure forever runs on boot
 * script updating procedures for Ghost? Or is this covered by PPA?
 
-##Misc/All scripts
+###Misc/All scripts
 * installing unattended-updates for security
 * move wat-dection to `domino` function
 
-##Set up tor:
+###Set up tor:
 * Create user `tor`
 * Assign all tasks to user `tor`
 * init.d script to launch HS on boot
 * Output relevant details to file in `/home/tor`
 * Backup keys to `/home/tor`
 
-##Backup Ghost sqlite database
+###Backup Ghost sqlite database
 * cron monthly to `/home/tor/month-year`
 
-##Create separate script for just installing the Tor Hidden Service (non-ghost)
+###Create separate script for just installing the Tor Hidden Service (non-ghost)
 * (all as above, plus)
 * Select directory for hidden service, else `/var/www`
 * Select port (or automatically pick one)
