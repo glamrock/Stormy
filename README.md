@@ -1,7 +1,7 @@
 Stormy
 =========
 
-*Stormy* is a wizard to help people create Tor Hidden Services with just a couple of clicks. Currently, it's setup to install Ghost (a swanky nodejs-based blog platform). Another great option is to create an application using [APAF](https://apaf.readthedocs.org/en/latest/), but if you know how to code twisted-based applications in freaking python, then you're probably not even reading this :P
+*Stormy* is a wizard to help people create Tor Hidden Services with just a couple of clicks. Currently, it's setup to install Ghost (a swanky nodejs-based blog platform). Another option is to create an application using [APAF](https://apaf.readthedocs.org/en/latest/), but if you know how to code twisted-based applications in freaking python, then you're probably not even reading this :P
 
 **To test:**
 * ssh into your server
@@ -15,6 +15,9 @@ Once your hidden service is set up, go to your onion address. `xxxx.onion/ghost/
 
 This is a work in progress, having begun at Tor's Winter Dev Meeting 2014. Treat all code as if I'm insane.
 
+###[Roadmap & Ideas](https://github.com/glamrock/Stormy/blob/master/roadmap_notes.md)
+
+###License
 All code is licensed under MIT, a supervillain-friendly license. I'm still working on the [evil laugh](http://www.youtube.com/watch?v=IGqwqxRF598).
 
 ![Ignore Me!](http://i.imgur.com/1xV099o.jpg)
