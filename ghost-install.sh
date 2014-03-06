@@ -25,6 +25,9 @@ domino
 
 # CLEAN ENVIRONMENT FIRST
 function domino {
+
+# rewrite this area
+
 # Empty various cache files
     echo 'Preparing workspace'
 

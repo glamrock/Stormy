@@ -6,10 +6,12 @@
 ###Misc/All scripts
 * installing unattended-updates for security
 * move wat-dection to `domino` function
+* rewrite domino
 
 ###Set up tor:
 * Create user `tor`
-* Assign all tasks to user `tor`
+* Assign all tasks to user `tor`/`debian-tor`
+* chown the hidden service directory to `tor`/`debian-tor`
 * init.d script to launch HS on boot
 * Output relevant details to file in `/home/tor`
 * Backup keys to `/home/tor`
