@@ -70,7 +70,7 @@ echo ''
 #do
 echo '1. Install dependencies Ubuntu 12.04 and above'
 echo '2. Install dependencies for Debian'
-echo '3. Install Ghost'
+echo '3. Install APAF'
 echo '4. Set up Tor'
 echo '5. View instructions'
 echo '9. Exit without installing anything'

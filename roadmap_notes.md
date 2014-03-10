@@ -7,6 +7,7 @@
 * installing unattended-updates for security
 * move wat-dection to `domino` function
 * rewrite domino
+* check if blocked before installing
 
 ###Set up tor:
 * Create user `tor`
