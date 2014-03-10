@@ -8,6 +8,9 @@
 * move wat-dection to `domino` function
 * rewrite domino
 * check if blocked before installing
+* offer ubuntu server vm download? (pre-defined onion would be huge issue)
+* fetch keys or full keyring of tor devs and related peeps
+* version that will run/create with no user input (eg, remove wizard)
 
 ###Set up tor:
 * Create user `tor`
