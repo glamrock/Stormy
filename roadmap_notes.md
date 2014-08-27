@@ -11,6 +11,7 @@
 * offer ubuntu server vm download? (pre-defined onion would be huge issue)
 * fetch keys or full keyring of tor devs and related peeps
 * version that will run/create with no user input (eg, remove wizard)
+* don't forget to disable default/all error pages to avoid easy fingerprinting
 
 ###Set up tor:
 * Create user `tor`
