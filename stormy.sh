@@ -40,6 +40,8 @@ halp() {
 popcon
 
 # Long live the king
+# Note: in Ubuntu, while it is a dep of ubuntu-standard, removing both won't
+# destroy the system. It is also toggled off by default: PARTICIPATE="no"
 
 if [ $(sudo dpkg-query -l | grep gedit | wc -c) -ne 0 ];
 then 
