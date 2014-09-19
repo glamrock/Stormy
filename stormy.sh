@@ -21,7 +21,58 @@ function root {
     if [ "$UID" -ne "$ROOT_UID" ] ; then
         echo 'Requires administrator privileges. Please run with sudo.'
         exit;
+    else
+        addsource
     fi
+}
+
+#----- DISABLE POPULARITY -----#
+
+function popcon {
+
+# Long live the king
+# Note: in Ubuntu, while it is a dep of ubuntu-standard, removing both won't
+# destroy the system. It is also toggled off by default: PARTICIPATE="no"
+
+    if [ $(sudo dpkg-query -l | grep gedit | wc -c) -ne 0 ];
+    then 
+      apt-get purge popularity-contest
+    fi
+}
+
+
+
+
+#----- ADD SOFTWARE SOURCES -----#
+
+function addsource {
+# Adds sources for various Ghost dependencies
+
+# Detect if Ubuntu
+    if [[ `lsb_release -is` == "Ubuntu" ]]
+        echo 'Adding software sources'
+        sudo add-apt-repository ppa:chris-lea/node.js -y -qq
+        sudo apt-get update -y -qq
+        echo 'Done.'
+
+# Detect if Debian
+
+    elif [[ `lsb_release -is` == "Debian" ]]
+        echo 'Adding software sources'
+        apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 136221EE520DDFAF0A905689B9316A7BC7917B12
+        cp /etc/apt/sources.list /etc/apt/sources.list.original
+        echo "deb http://ppa.launchpad.net/chris-lea/node.js/ubuntu lucid main" | tee -a /etc/apt/sources.list
+        echo "deb-src http://ppa.launchpad.net/chris-lea/node.js/ubuntu lucid main" | sudo tee -a /etc/apt/sources.list
+        apt-get update -y -qq
+        echo 'Done.'
+
+# Detect Wat
+    else
+        echo 'Sorry, this script is just for Ubuntu or Debian systems!'
+        exit
+    fi
+
+    wizard #fly off to the wizard function
 }
 
 
@@ -51,17 +102,6 @@ function halp {
 
 
 
-function popcon {
-
-# Long live the king
-# Note: in Ubuntu, while it is a dep of ubuntu-standard, removing both won't
-# destroy the system. It is also toggled off by default: PARTICIPATE="no"
-
-    if [ $(sudo dpkg-query -l | grep gedit | wc -c) -ne 0 ];
-    then 
-      apt-get purge popularity-contest
-    fi
-}
 
 
 # Exit dialogue
@@ -74,6 +114,8 @@ function end {
         clear && exit
     fi
 }
+
+root #start at the beginning
 
 ## END OF TRANSMISSION ##
 
