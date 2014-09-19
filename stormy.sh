@@ -14,7 +14,7 @@
 
 # Halper function
 
-halp() {
+function halp {
 	printf "Usage: stormy [-g, --ghost]\n"\
 	"       stormy  (without options will run the wizard)\n"\
     "Options:\n"\
@@ -37,15 +37,29 @@ halp() {
 
 
 
-popcon
+function popcon {
 
 # Long live the king
 # Note: in Ubuntu, while it is a dep of ubuntu-standard, removing both won't
 # destroy the system. It is also toggled off by default: PARTICIPATE="no"
 
-if [ $(sudo dpkg-query -l | grep gedit | wc -c) -ne 0 ];
-then 
-  apt-get purge popularity-contest
-fi
+    if [ $(sudo dpkg-query -l | grep gedit | wc -c) -ne 0 ];
+    then 
+      apt-get purge popularity-contest
+    fi
+}
 
+
+# Exit dialogue
+function end {
+    echo ''
+    read -p 'Are you sure you want to quit? (Y)es/(n)o '
+    if [ '$REPLY' == 'n' ]; then
+        clear && installmenu
+    else
+        clear && exit
+    fi
+}
+
+## END OF TRANSMISSION ##
 
