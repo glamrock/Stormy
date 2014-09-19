@@ -12,6 +12,20 @@
 #   stormy --purge [$nick]  (attempts to delete a hidden service and content)
 # =========================================================================== #
 
+
+# CHECK IF ROOT
+
+function root {
+    ROOT_UID="0"
+
+    if [ "$UID" -ne "$ROOT_UID" ] ; then
+        echo 'Requires administrator privileges. Please run with sudo.'
+        exit;
+    fi
+}
+
+
+
 # Halper function
 
 function halp {
@@ -29,7 +43,7 @@ function halp {
     "Advanced Options:\n"\
     ""
 
-	exit 1;
+	exit;
 }
 
 
@@ -55,7 +69,7 @@ function end {
     echo ''
     read -p 'Are you sure you want to quit? (Y)es/(n)o '
     if [ '$REPLY' == 'n' ]; then
-        clear && installmenu
+        clear && wizard
     else
         clear && exit
     fi
