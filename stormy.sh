@@ -43,7 +43,7 @@ function popcon {
 
     if [ $(dpkg-query -l | grep popularity-contest | wc -c) -ne 0 ];
     then     
-        if [[ `lsb_release -is` == "Debian" ]]
+        if [[ `lsb_release -is` == "Debian" ]] 
           apt-get purge popularity-contest
         elif [[ `lsb_release -is` == "Ubuntu" ]] #I need more info here
           sed -i '/PARTICIPATE/c\PARTICIPATE="no"' ./etc/popularity-contest.conf
@@ -62,13 +62,6 @@ function addsource {
     if [[ `lsb_release -is` == "Ubuntu" ]]
         echo 'Adding software sources'
         cp /etc/apt/sources.list /etc/apt/sources.list.original #backup original sources file
-        
-
-
-        sudo add-apt-repository ppa:chris-lea/node.js -y -qq #nodejs
-        sudo apt-get update -y -qq
-
-        
 
         echo 'Done.'
 
@@ -76,10 +69,8 @@ function addsource {
 
     elif [[ `lsb_release -is` == "Debian" ]]
         echo 'Adding software sources'
-        apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 136221EE520DDFAF0A905689B9316A7BC7917B12
+        apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 136221EE520DDFAF0A905689B9316A7BC7917B12 #node
         cp /etc/apt/sources.list /etc/apt/sources.list.original
-        echo "deb http://ppa.launchpad.net/chris-lea/node.js/ubuntu lucid main" | tee -a /etc/apt/sources.list
-        echo "deb-src http://ppa.launchpad.net/chris-lea/node.js/ubuntu lucid main" | tee -a /etc/apt/sources.list 
         apt-get update -y -qq
         echo 'Done.'
 
