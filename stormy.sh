@@ -1,5 +1,6 @@
 #!/bin/bash
-
+# -*- Mode: sh; coding: utf-8; indent-tabs-mode: nil; tab-width: 4 -*-
+# 
 # =========================================================================== #
 # Stormy, the easy hidden service creator
 # by Griffin Boyce <griffin@torproject.org>, with review from various dags
@@ -44,7 +45,7 @@ function popcon {
     if [ $(dpkg-query -l | grep popularity-contest | wc -c) -ne 0 ];
     then     
         if [[ `lsb_release -is` == "Debian" ]] 
-          apt-get purge popularity-contest
+          apt-get purge popularity-contest #not a dependency for Debian
         elif [[ `lsb_release -is` == "Ubuntu" ]] #I need more info here
           sed -i '/PARTICIPATE/c\PARTICIPATE="no"' ./etc/popularity-contest.conf
           chmod -x /etc/cron.daily/popularity-contest
@@ -56,11 +57,11 @@ function popcon {
 #----- ADD SOFTWARE SOURCES -----#
 
 function addsource {
-# Adds sources for various Ghost dependencies
+# Adds sources for various dependencies
+        echo 'Adding software sources'
 
 # Detect if Ubuntu
     if [[ `lsb_release -is` == "Ubuntu" ]]
-        echo 'Adding software sources'
         cp /etc/apt/sources.list /etc/apt/sources.list.original #backup original sources file
 
         echo 'Done.'
@@ -71,12 +72,15 @@ function addsource {
         echo 'Adding software sources'
         apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 136221EE520DDFAF0A905689B9316A7BC7917B12 #node
         cp /etc/apt/sources.list /etc/apt/sources.list.original
+
         apt-get update -y -qq
         echo 'Done.'
 
 # Detect Wat
     else
         echo 'Sorry, this script is just for Ubuntu or Debian systems!'
+        echo 'Using another OS? Send a request to griffin@torproject.org'
+        echo 'https://github.com/glamrock/stormy'
         exit
     fi
 
