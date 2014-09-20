@@ -132,15 +132,14 @@ function halp {
 
 function logout {
     echo 'Please reboot if possible. Your hidden service will start automatically.'
-    read -p "(O)kay! / (I) can't yet."
+    read -p "(O)kay! / (I) can't yet.    " REPLY 
 
-if [ '$REPLY' == 'o' ]; then
-    sudo shutdown -r +1 "Rebooting!"
+if [ "$REPLY" == "o" ]||[ "$REPLY" == "O" ]; then
+    shutdown -r +1 "Rebooting!"
 
-elif [ '$REPLY' == 'O' ]; then
-    sudo shutdown -r +1 "Rebooting!"
 else
-    echo 'Please reboot your system when possible. Remember, your hidden services will start automatically whenever the system starts.'
+    echo 'Please reboot your system when possible.'
+    echo 'Remember, your hidden services will start automatically whenever the system starts.'
     exit
 fi
 }
@@ -150,12 +149,13 @@ fi
 
 function end {
     echo ''
-    read -p 'Are you sure you want to quit? (Y)es/(n)o '
-    if [ '$REPLY' == 'n' ]; then
+    read -p "Are you sure you want to quit? (Y)es/(n)o " REPLY
+    if [ "$REPLY" = "n" ]; then
         clear && wizard
     else
         clear && exit
     fi
+
 }
 
 root #start at the beginning
