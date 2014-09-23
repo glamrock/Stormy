@@ -118,7 +118,7 @@ cleanup
 }
 
 #----- Install Ghost and related dependencies -----#
-elif [ $INPUT -eq 2 ]; then
+elif [ "$INPUT" -eq 2 ]; then
     echo 'Installing dependencies...'
     apt-get build-dep python-defaults -y -qq
     apt-get update -y -qq
@@ -129,13 +129,25 @@ elif [ $INPUT -eq 2 ]; then
     apt-get update -y -qq
     apt-get install npm -y -qq
     npm install forever -g
-    
+
+
 # Double-check for broken deps before finishing up
     echo 'Checking integrity...'
     apt-get check -y -qq
 
 # Debian users are less nervous than Ubuntu users, but still.
     echo 'Dependencies installed!'
+
+
+
+
+
+
+# Start Ghost
+    NODE_ENV=production forever --minUptime=100ms --spinSleepTime=3000ms start index.js -e error.log
+#Node supervisor
+    
+
 
 #kick over to cleanup
     cleanup
