@@ -17,9 +17,7 @@
 # CHECK IF ROOT
 
 function root {
-    ROOT_UID="0"
-
-    if [ "$UID" -ne "$ROOT_UID" ] ; then
+    if [[ `whoami` != root ]]; then
         echo "This install script should be run as root. (aka administrator)"
 #       echo "Please try again using the sudo command."
         exit;
@@ -129,6 +127,7 @@ elif [ "$INPUT" -eq 2 ]; then
     apt-get update -y -qq
     apt-get install npm -y -qq
     npm install forever -g
+    npm install ghost -g
 
 # Double-check for broken deps before finishing up
     echo 'Checking integrity...'
@@ -141,8 +140,6 @@ elif [ "$INPUT" -eq 2 ]; then
 # Start Ghost and set Forever
     cd /var/www/ghost
     NODE_ENV=production forever --minUptime=100ms --spinSleepTime=3000ms start index.js -e error.log
-
-
 
  if [[ `lsb_release -is` == "Ubuntu" ]]
     touch /etc/init/ghost.conf
