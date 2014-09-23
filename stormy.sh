@@ -74,6 +74,9 @@ function addsource {
     wizard #fly off to the wizard function
 }
 
+
+
+
 # Halper function
 
 function halp {
@@ -92,27 +95,6 @@ function halp {
     ""
 
 	exit;
-}
-
-#----- DISABLE POPULARITY -----#
-
-function popcon {
-
-# Long live the king
-# Note: in Ubuntu, while it is a dep of ubuntu metapackages, removing both might
-# not destroy the system. It is also toggled off by default: PARTICIPATE="no"
-# http://ubuntuforums.org/showthread.php?t=1654103 gives me pause.
-
-    if [ $(dpkg-query -l | grep popularity-contest | wc -c) -ne 0 ];
-    then     
-        if [[ `lsb_release -is` == "Debian" ]] 
-          apt-get purge popularity-contest #not a dependency for Debian
-        elif [[ `lsb_release -is` == "Ubuntu" ]]
-          sed -i '/PARTICIPATE/c\PARTICIPATE="no"' ./etc/popularity-contest.conf
-          chmod -x /etc/cron.daily/popularity-contest #I need more info here
-    fi
-
-cleanup
 }
 
 #----- Install Ghost and related dependencies -----#
@@ -190,6 +172,28 @@ EOF'
 # kick over to popcon
     popcon
 
+#----- DISABLE POPULARITY -----#
+
+function popcon {
+
+# Long live the king
+# Note: in Ubuntu, while it is a dep of ubuntu metapackages, removing both might
+# not destroy the system. It is also toggled off by default: PARTICIPATE="no"
+# http://ubuntuforums.org/showthread.php?t=1654103 gives me pause.
+
+    if [ $(dpkg-query -l | grep popularity-contest | wc -c) -ne 0 ];
+    then     
+        if [[ `lsb_release -is` == "Debian" ]] 
+          apt-get purge popularity-contest #not a dependency for Debian
+        elif [[ `lsb_release -is` == "Ubuntu" ]]
+          sed -i '/PARTICIPATE/c\PARTICIPATE="no"' ./etc/popularity-contest.conf
+          chmod -x /etc/cron.daily/popularity-contest #I need more info here
+    fi
+
+cleanup
+}
+
+
 #----- Cleanup -----#
 # elif [ "$INPUT" -eq 4 ]; then
 
@@ -236,7 +240,7 @@ fi
 
 function end {
     echo ''
-    read -p "Are you sure you want to quit? (Y)es/(n)o " REPLY
+    read -p "Are you sure you want to quit? (Y)es/(n)o     " REPLY
     if [ "$REPLY" = "n" ]; then
         clear && wizard
     else
