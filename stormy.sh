@@ -122,14 +122,13 @@ elif [ "$INPUT" -eq 2 ]; then
     echo 'Installing dependencies...'
     apt-get build-dep python-defaults -y -qq
     apt-get update -y -qq
-    apt-get install python python-dev python-software-properties -y -qq
+    apt-get install iptables python python-dev python-software-properties -y -qq
 
 # NODE
     apt-get install g++ make nodejs -y -qq
     apt-get update -y -qq
     apt-get install npm -y -qq
     npm install forever -g
-
 
 # Double-check for broken deps before finishing up
     echo 'Checking integrity...'
@@ -139,17 +138,48 @@ elif [ "$INPUT" -eq 2 ]; then
     echo 'Dependencies installed!'
 
 
-
-
-
-
-# Start Ghost
+# Start Ghost and set Forever
+    cd /var/www/ghost
     NODE_ENV=production forever --minUptime=100ms --spinSleepTime=3000ms start index.js -e error.log
-#Node supervisor
-    
 
 
-#kick over to cleanup
+
+ if [[ `lsb_release -is` == "Ubuntu" ]]
+    touch /etc/init/ghost.conf
+    bash -c 'cat << EOF > /etc/init/ghost.conf
+start on startup
+exec forever start /var/www/ghost/ghost.js
+    EOF'
+
+ else #For Debian and non-Debian derivatives, manual labor is required
+
+# Init.d file to auto-start forever+ghost
+  bash -c 'cat << EOF > /etc/init.d/forever
+    #!/bin/sh
+
+    export PATH=$PATH:/usr/local/bin
+    export NODE_PATH=$NODE_PATH:/usr/local/lib/node_modules
+    export SERVER_PORT=80
+    export SERVER_IFACE='127.0.0.1'
+
+    case "$1" in
+      'start')
+      exec forever --sourceDir=/var/www/ghost -p ~/.forever start server.js
+      ;;
+
+      'stop')
+      exec forever stop --sourceDir=/var/www/ghost server.js
+      ;;
+    esac
+
+    exit 0
+EOF'
+
+    chmod +x /etc/init.d/forever
+    ln -s /etc/init.d/forever /etc/rc.d/
+    update-rc.d forever defaults #forever+ghost will now rise on boot
+
+# kick over to cleanup
     cleanup
 
 #----- Cleanup -----#
