@@ -35,9 +35,10 @@ dist=$(lsb_release -is)
 #----- ADD DEVELOPER KEYS -----#
 
 function keyfob {
-    apt-key adv --keyserver keys.mayfirst.org --recv-keys 136221EE520DDFAF0A905689B9316A7BC7917B12 #node
-    
-    apt-key adv --keyserver keys.mayfirst.org --recv-keys 4A90646C0BAED9D456AB3111E5B81856D0220E4B 35CD74C24A9B15A19E1A81A194373AA94B7C3223 8C4CD511095E982EB0EFBFA21E8BF34923291265 AD1AB35C674DF572FBCE8B0A6BC758CBC11F6276 0D24B36AA9A2A651787876451202821CBE2CD9C1 25FC1614B8F87B52FF2F99B962AF4031C82E0039 261C5FBE77285F88FB0C343266C8C2D7C5AA446D C963C21D63564E2B10BB335B29846B3C683686CC 68278CC5DD2D1E85C4E45AD90445B7AB9ABBEEC6 A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89 0291ECCBE42B22068E685545627DEE286B4D6475 02959AA7190AB9E9027E07363B9D093F31B0974B C2E34CFC13C62BD92C7579B56B8AAEB1F1F5C9B5 8738A680B84B3031A630F2DB416F061063FEE659 B35BF85BF19489D04E28C33C21194EBB165733EA F65CE37F04BA5B360AE6EE17C218525819F78451 B1172656DFF983C3042BC699EB5A896A28988BF5 879BDA5BF6B27B6127450A2503CF4A0AB3C79A63 #tor build keys
+    apt-key adv --keyserver keys.mayfirst.org --recv-keys 136221EE520DDFAF0A905689B9316A7BC7917B12| apt-key add - #node
+
+# Tor build keys
+    apt-key adv --keyserver keys.mayfirst.org --recv-keys 4A90646C0BAED9D456AB3111E5B81856D0220E4B 35CD74C24A9B15A19E1A81A194373AA94B7C3223 8C4CD511095E982EB0EFBFA21E8BF34923291265 AD1AB35C674DF572FBCE8B0A6BC758CBC11F6276 0D24B36AA9A2A651787876451202821CBE2CD9C1 25FC1614B8F87B52FF2F99B962AF4031C82E0039 261C5FBE77285F88FB0C343266C8C2D7C5AA446D C963C21D63564E2B10BB335B29846B3C683686CC 68278CC5DD2D1E85C4E45AD90445B7AB9ABBEEC6 A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89 0291ECCBE42B22068E685545627DEE286B4D6475 02959AA7190AB9E9027E07363B9D093F31B0974B C2E34CFC13C62BD92C7579B56B8AAEB1F1F5C9B5 8738A680B84B3031A630F2DB416F061063FEE659 B35BF85BF19489D04E28C33C21194EBB165733EA F65CE37F04BA5B360AE6EE17C218525819F78451 B1172656DFF983C3042BC699EB5A896A28988BF5 879BDA5BF6B27B6127450A2503CF4A0AB3C79A63| apt-key add -
 
 addsource
 }
@@ -53,12 +54,14 @@ function addsource {
 
 # Detect if Ubuntu
     if [[ `lsb_release -is` == "Ubuntu" ]]
-    echo "$dist $version"
+
+    echo "deb  http://deb.torproject.org/torproject.org $version main"| tee -a /etc/apt/sources.list
 
 # Detect if Debian
 
     elif [[ `lsb_release -is` == "Debian" ]]
 
+    echo "deb  http://deb.torproject.org/torproject.org $version main"| tee -a /etc/apt/sources.list
 # Detect Wat
     else
         echo 'Sorry, this script is just for Ubuntu or Debian systems!'
@@ -69,11 +72,29 @@ function addsource {
 
 # Update after the new sources
         apt-get update -y -qq
+        apt-get install deb.torproject.org-keyring #better safe than sorry
         echo 'Done.'
 
     wizard #fly off to the wizard function
 }
 
+
+#----- INSTALL Wizard / MENU -----#
+function wizard {
+INPUT=0
+    echo ''
+    echo 'MAIN MENU'
+    echo 'What would you like to do? (Enter the number of your choice)'
+    echo ''
+    echo '1. Install hidden service dependencies' # webserver + tor
+    echo '2. Set up a Ghost-based hidden service (blog)'
+    echo '3. Create a wiki using Moinmoin'
+    echo '4. Create a personal cloud server (for files, calendar, tasks)'
+    echo '5. Install a Jabber server'
+    echo '8. View more instructions'
+    echo '9. Exit without installing anything'
+    echo ''
+read INPUT
 
 
 
@@ -103,6 +124,7 @@ elif [ "$INPUT" -eq 2 ]; then
     apt-get build-dep python-defaults -y -qq
     apt-get update -y -qq
     apt-get install iptables python python-dev python-software-properties -y -qq
+    apt-get install tor
 
 # NODE
     apt-get install g++ make nodejs -y -qq
@@ -130,6 +152,19 @@ elif [ "$INPUT" -eq 2 ]; then
     npm install --production #this installs Ghost
 
 
+# Meddling with uncaught nodejs exceptions
+
+# Do I want to tack this on to index.js?  In the cause of uncaught exceptions,
+# it would force-crash Ghost and forever would bring it back up within 3 seconds
+
+# process.on('uncaughtException', function (err) {
+#  console.error((new Date).toUTCString() + ' uncaughtException:', err.message)
+#  console.error(err.stack)
+#  process.exit(1)
+#})
+
+
+
 # Start Ghost and set Forever
     cd /var/www/ghost
     NODE_ENV=production forever --minUptime=100ms --spinSleepTime=3000ms start index.js -e error.log
@@ -150,14 +185,14 @@ exec forever start /var/www/ghost/ghost.js
     export PATH=$PATH:/usr/local/bin
     export NODE_PATH=$NODE_PATH:/usr/local/lib/node_modules
     export SERVER_PORT=80
-    export SERVER_IFACE='127.0.0.1'
+    export SERVER_IFACE=127.0.0.1
 
     case "$1" in
-      'start')
+      start)
       exec forever --sourceDir=/var/www/ghost -p ~/.forever start server.js
       ;;
 
-      'stop')
+      stop)
       exec forever stop --sourceDir=/var/www/ghost server.js
       ;;
     esac
@@ -235,6 +270,11 @@ else
 fi
 }
 
+#----- Man Page -----#
+
+elif [ "$INPUT" -eq 8 ]; then
+    echo 'You have exited the wizard.'
+    man stormy
 
 #----- Exit Dialogue -----#
 
