@@ -137,6 +137,17 @@ elif [ "$INPUT" -eq 2 ]; then
     echo 'Dependencies installed!'
 
 
+# Get and install Ghost
+# double-check that the nick is unset and directory doesn't exist
+
+    cd /var/www
+    wget -O ghost.zip https://ghost.org/zip/ghost-latest.zip
+    unzip -d ghost ghost.zip
+    rm ghost.zip
+    cd ghost
+    npm install --production #this installs Ghost
+
+
 # Start Ghost and set Forever
     cd /var/www/ghost
     NODE_ENV=production forever --minUptime=100ms --spinSleepTime=3000ms start index.js -e error.log
@@ -176,8 +187,8 @@ EOF'
     ln -s /etc/init.d/forever /etc/rc.d/
     update-rc.d forever defaults #forever+ghost will now rise on boot
 
-# kick over to cleanup
-    cleanup
+# kick over to popcon
+    popcon
 
 #----- Cleanup -----#
 # elif [ "$INPUT" -eq 4 ]; then
