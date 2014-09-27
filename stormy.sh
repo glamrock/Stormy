@@ -78,7 +78,6 @@ function addsource {
     wizard #fly off to the wizard function
 }
 
-
 #----- INSTALL Wizard / MENU -----#
 function wizard {
 INPUT=0
@@ -120,6 +119,9 @@ function halp {
 
 #----- Install Ghost and related dependencies -----#
 elif [ "$INPUT" -eq 2 ]; then
+    ghost
+
+ghost() {
     echo 'Installing dependencies...'
     apt-get build-dep python-defaults -y -qq
     apt-get update -y -qq
@@ -151,7 +153,6 @@ elif [ "$INPUT" -eq 2 ]; then
     cd ghost
     npm install --production #this installs Ghost
 
-
 # Meddling with uncaught nodejs exceptions
 
 # Do I want to tack this on to index.js?  In the cause of uncaught exceptions,
@@ -162,7 +163,6 @@ elif [ "$INPUT" -eq 2 ]; then
 #  console.error(err.stack)
 #  process.exit(1)
 #})
-
 
 
 # Start Ghost and set Forever
@@ -206,6 +206,43 @@ EOF'
 
 # kick over to popcon
     popcon
+}
+
+
+
+#----- Tor Dependencies and creation -----#
+
+torque() { # should this be initiated before the wizard?
+
+}
+
+
+
+#----- RSS Reader -----#
+
+rss() {
+
+}
+
+
+#----- XMPP Server -----#
+
+jabber() {
+
+
+    echo "Use the default Jabber configuration file? [Y/n]"
+    
+}
+
+
+#----- IRC chat -----#
+
+irc() {
+
+    echo "Would you like to install a web-based chat client for your IRC service?"
+
+}
+
 
 #----- DISABLE POPULARITY -----#
 
