@@ -103,9 +103,7 @@ ghost() {
 # Debian users are less nervous than Ubuntu users, but still.
     echo 'Dependencies installed!'
 
-
 # Get and install Ghost
-# double-check that the nick is unset and directory doesn't exist
 
     cd /var/www
     wget -O ghost.zip https://ghost.org/zip/ghost-latest.zip
@@ -134,6 +132,8 @@ ghost() {
     touch /etc/init/ghost.conf
     bash -c 'cat << EOF > /etc/init/ghost.conf
 start on startup
+stop on shutdown
+
 exec forever start /var/www/ghost/ghost.js
     EOF'
 
@@ -150,11 +150,11 @@ exec forever start /var/www/ghost/ghost.js
 
     case "$1" in
       start)
-      exec forever --sourceDir=/var/www/ghost -p ~/.forever start server.js
+      exec forever --sourceDir=/var/www/ghost -p ~/.forever --minUptime=100ms --spinSleepTime=3000ms start index.js -e error.log
       ;;
 
       stop)
-      exec forever stop --sourceDir=/var/www/ghost server.js
+      exec forever stop --sourceDir=/var/www/ghost index.js
       ;;
     esac
 

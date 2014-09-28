@@ -189,11 +189,11 @@ exec forever start /var/www/ghost/ghost.js
 
     case "$1" in
       start)
-      exec forever --sourceDir=/var/www/ghost -p ~/.forever start server.js
+      exec forever --sourceDir=/var/www/ghost -p ~/.forever --minUptime=100ms --spinSleepTime=3000ms start index.js -e error.log
       ;;
 
       stop)
-      exec forever stop --sourceDir=/var/www/ghost server.js
+      exec forever stop --sourceDir=/var/www/ghost index.js
       ;;
     esac
 
