@@ -255,7 +255,7 @@ fi
     chown -hR debian-tor /var/lib/tor #set ownership for this folder and all subfolders to user debian-tor
     chmod 0700 /var/lib/tor/ghost 
 
-    sed -i '/RUN_DEAMON="no"/c\RUN_DEAMON="yes"' ./etc/default/tor #allow to start on boot, even if it was previously set to no
+    sed -i '/RUN_DAEMON="no"/c\RUN_DAEMON="yes"' ./etc/default/tor #allow to start on boot, even if it was previously set to no
     update-rc.d tor defaults
     echo 'Your hidden service will start on boot.'
 
@@ -271,9 +271,6 @@ function spooky {
     echo "Your onion address is":  "$hostname"
 
     # map the .onion address to ghost's config file
-
-
-
 
 
  
