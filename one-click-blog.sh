@@ -344,12 +344,19 @@ function cleanup {
     apt-get autoremove -y -qq
     echo 'Cleaning up temporary cache...'
     apt-get clean -y -qq
-    echo 'Done.'
+    echo 'Done!'
     sleep 1
-
-
-
     clear
+
+    echo "Please take a moment to write down your hidden service address."
+    echo ""
+    echo "Your onion address is":  "$hostname"
+    echo ""
+    echo "To access your blog dashboard, go to $hostname/ghost"
+    echo ""
+    echo "Your hidden service's private key is located in /var/lib/tor/ghost"
+    sleep 10
+
 
 log #kick to logoff/reboot function
 }
@@ -357,16 +364,19 @@ log #kick to logoff/reboot function
 #----- Logout Dialogue -----#
 
 function log {
-    echo 'Please reboot if possible. Your hidden service will start automatically.'
-    read -p "(O)kay! / (I) can't yet.    " REPLY 
+   echo 'Please reboot if possible. Your hidden service will start automatically.'
+    echo "(O)kay! / (I) can't yet."
+    read -p "" REPLY 
+    echo ""
 
-if [ "$REPLY" == "o" ]||[ "$REPLY" == "O" ]; then
+if [ "$REPLY" = "o" ]||[ "$REPLY" = "O" ]; then
     shutdown -r +1 "Rebooting!"
 
 else
     echo 'Please reboot your system when possible.'
     echo 'Remember, your hidden services will start automatically whenever the system starts.'
     exit
+    
 fi
 }
 
