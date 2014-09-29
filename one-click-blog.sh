@@ -142,6 +142,47 @@ fi
     ln -s /etc/init.d/forever /etc/rc.d/
     update-rc.d forever defaults #forever+ghost will now rise on boot
 
+#backup content on a regular basis
+
+  mkdir /var/lib/tor/backups
+
+  bash -c 'cat << EOF > /etc/cron.monthly/ghost
+#!/bin/sh
+
+for file in /var/www/ghost/content/data/*.db;
+	do cp "$file" /var/lib/tor/backups/"${file}-ghost-`date +%Y-%m`";
+done
+
+EOF'
+
+#check for updates, and if they exist, execute them
+
+bash -c 'cat <<EOF> /etc/cron.daily/ghost
+#!bin/sh
+
+cd /var/www/ghost
+
+wget https://ghost.org/zip/ghost-latest.zip --timestamping --ignore-length --no-verbose
+unzip -d ghost-update ghost-latest.zip
+
+service ghost stop #stop ghost before updating
+
+cp ghost-update/*.md ghost-update/*.js ghost-update/*.json ..
+rm -R core
+cp -R ghost-update/core ..
+cp -R ghost-update/content/themes/caspar content/themes
+chown -R ghost:ghost /var/www/ghost
+
+npm install --production
+
+rm -R ghost-update
+
+service ghost start #starts ghost again
+
+EOF'
+
+
+
 # kick over to tor 
     torque
 }
@@ -226,12 +267,17 @@ function spooky {
     echo 'Generating .onion address'
     sudo -u debian-tor tor --runasdaemon 1 #run tor to generate a hostname
 
+    hostname=$(cat /var/lib/tor/ghost/hostname)
+    echo "Your onion address is":  "$hostname"
+
     # map the .onion address to ghost's config file
 
-    hostname=$(cat /var/lib/tor/ghost/hostname)
-    echo $hostname 
 
-    
+
+
+
+ 
+   
 
 popcon #disable popularity contest
 }
