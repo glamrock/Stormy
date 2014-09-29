@@ -370,19 +370,6 @@ else
 fi
 }
 
-#----- Exit Dialogue -----#
-
-function end {
-    echo ''
-    read -p "Are you sure you want to quit? (Y)es/(n)o     " REPLY
-    if [ "$REPLY" = "n" ]; then
-        clear && root  #go back to the beginning
-    else
-        clear && exit
-    fi
-
-}
-
 root #start at the beginning
 
 ## END OF TRANSMISSION ##
