@@ -146,7 +146,7 @@ fi
 
   mkdir /var/lib/tor/backups
 
-  bash -c 'cat << EOF > /etc/cron.monthly/ghost
+  bash -c 'cat << EOF > /etc/cron.monthly/ghost-backup
 #!/bin/sh
 
 for file in /var/www/ghost/content/data/*.db;
@@ -259,7 +259,32 @@ fi
     update-rc.d tor defaults
     echo 'Your hidden service will start on boot.'
 
-spooky #
+server #
+}
+
+function server {
+
+# set nginx config
+  bash -c 'cat << EOF > /etc/nginx/sites-available/ghost
+server {  
+        listen 80;
+        server_name localhost;
+
+        location / {
+                proxy_pass http://127.0.0.1:2368;
+                proxy_set_header Host $host;
+                proxy_buffering off;
+        }
+EOF'
+
+ln -s /etc/nginx/sites-available/ghost /etc/nginx/sites-enabled/ghost  
+service nginx restart 
+
+
+}
+
+
+spooky #let's bring it all together now
 }
 
 function spooky { 
@@ -272,9 +297,9 @@ function spooky {
 
     # map the .onion address to ghost's config file
 
+    cp /var/www/ghost/config.example.js /var/www/ghost/config.js
 
- 
-   
+    sed -i "s/my-ghost-blog.com/$hostname/" /var/www/ghost/config.js   
 
 popcon #disable popularity contest
 }
@@ -320,7 +345,9 @@ function cleanup {
     echo 'Cleaning up temporary cache...'
     apt-get clean -y -qq
     echo 'Done.'
-    sleep 5
+    sleep 1
+
+
 
     clear
 
