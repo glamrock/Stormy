@@ -14,7 +14,7 @@
 # CHECK IF ROOT
 
 function root {
-    if [[ `whoami` != root ]]; then
+    if $whoami != root; then
         echo "This install script should be run as root. (aka administrator)"
         exit;
     else
@@ -48,13 +48,13 @@ function addsource {
 
 
 # Detect if Ubuntu
-    if [[ `lsb_release -is` == "Ubuntu" ]]
+    if [[ `lsb_release -is` == "Ubuntu" ]]; then
 
     echo "deb  http://deb.torproject.org/torproject.org $version main"| tee -a /etc/apt/sources.list
 
 # Detect if Debian
 
-    elif [[ `lsb_release -is` == "Debian" ]]
+    elif [[ `lsb_release -is` == "Debian" ]]; then
 
     echo "deb  http://deb.torproject.org/torproject.org $version main"| tee -a /etc/apt/sources.list
 # Detect Wat
@@ -75,12 +75,12 @@ function addsource {
 
 #----- Install Ghost and related dependencies -----#
 
-ghost() {
+function ghost {
     echo 'Installing dependencies...'
     apt-get build-dep python-defaults -y -qq
     apt-get update -y -qq
     apt-get install iptables python python-dev python-software-properties -y -qq
-    apt-get install tor
+    apt-get install tor nginx
 
 # NODE
     apt-get install g++ make nodejs -y -qq
@@ -98,6 +98,7 @@ ghost() {
 
 # Get and install Ghost from source
 
+    echo 'Installing your blog'
     cd /var/www
     wget -O ghost.zip https://ghost.org/zip/ghost-latest.zip
     unzip -d ghost ghost.zip
@@ -109,7 +110,8 @@ ghost() {
     cd /var/www/ghost
     NODE_ENV=production forever --minUptime=100ms --spinSleepTime=3000ms start index.js -e error.log
 
- if [[ `lsb_release -is` == "Ubuntu" ]]
+    echo 'Configuring your blog'
+ if [[ `lsb_release -is` == "Ubuntu" ]]; then
     touch /etc/init/ghost.conf
     bash -c 'cat << EOF > /etc/init/ghost.conf
 start on startup
@@ -141,7 +143,7 @@ exec forever start /var/www/ghost/ghost.js
 
     exit 0
 EOF'
-
+fi
     chmod +x /etc/init.d/forever
     ln -s /etc/init.d/forever /etc/rc.d/
     update-rc.d forever defaults #forever+ghost will now rise on boot
@@ -151,13 +153,11 @@ EOF'
 }
 
 
-
 #----- Tor Dependencies and creation -----#
 
 function torque { 
 
-
-
+    echo 'Configuring your Tor Hidden Service'
 
 # overwrite the existing torrc, but check if it contains an existing hs first
 
@@ -218,20 +218,26 @@ EOF'
 fi
 
     chown -hR debian-tor /var/lib/tor #set ownership for this folder and all subfolders to user debian-tor
-    chmod 0700 /var/lib/tor/ghost
+    chmod 0700 /var/lib/tor/ghost 
+
+    sed -i '/RUN_DEAMON="no"/c\RUN_DEAMON="yes"' ./etc/default/tor #allow to start on boot, even if it was previously set to no
+    update-rc.d tor defaults
+    echo 'Your hidden service will start on boot.'
 
 spooky #
 }
 
 function spooky { 
 
-sudo -u debian-tor tor --runasdaemon 1 #run tor to generate a hostname
+    echo 'Generating .onion address'
+    sudo -u debian-tor tor --runasdaemon 1 #run tor to generate a hostname
 
-# map the .onion address to ghost's config file
+    # map the .onion address to ghost's config file
 
-hostname=$(`cat /var/lib/tor/ghost/hostname`)
-echo $hostname 
+    hostname=$(`cat /var/lib/tor/ghost/hostname`)
+    echo $hostname 
 
+    
 
 popcon #disable popularity contest
 }
@@ -248,14 +254,14 @@ function popcon {
 
     if [ $(dpkg-query -l | grep popularity-contest | wc -c) -ne 0 ];
     then     
-        if [[ `lsb_release -is` == "Debian" ]] 
+        if [[ `lsb_release -is` == "Debian" ]]; then
           apt-get purge popularity-contest #not a dependency for Debian
-        elif [[ `lsb_release -is` == "Ubuntu" ]]
+        elif [[ `lsb_release -is` == "Ubuntu" ]]; then
             # delete the entire config string, then replace with a "no"
           sed -i '/PARTICIPATE/c\PARTICIPATE="no"' ./etc/popularity-contest.conf
           chmod -x /etc/cron.daily/popularity-contest #I need more info here
     fi
-
+   fi
 cleanup
 }
 
