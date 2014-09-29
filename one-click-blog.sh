@@ -165,26 +165,72 @@ if ! grep -qw "#HiddenServiceDir /var/lib/tor/hidden_service" /etc/tor/torrc; th
     echo "You are about to replace an existing tor configuration file."
     echo 'Continue? (Y)es  /  (N)o' 
     read -p '' REPLY
+
   if [ "$REPLY" == "y" ]||[ "$REPLY" == "Y" ]; then
+    cp /etc/tor/torrc /etc/tor/torrc.original
+    >| /etc/tor/torrc #truncate the torrc
+
+  bash -c 'cat << EOF > /etc/tor/torrc
+
+#Log notice file /var/log/tor/notices.log
+RunAsDaemon 1 # Will run tor in the background
+
+HiddenServiceDir /var/lib/tor/ghost/
+HiddenServicePort 80 127.0.0.1:2368
+HiddenServicePort 2368 127.0.0.1:2368 #default ghost port
+
+EOF'
 
 
-    echo "cat party"
-
-
-  else #no
-      echo "dog party"
+  else #no - cancels hs setup
+      echo "Stormy will now cancel hidden service setup. However, your blog is still installed."
+            echo 'Delete blog? (Y)es  /  (N)o' 
+            read -p '' SEANCE
+          if [ "$SEANCE" == "y" ]||[ "$SEANCE" == "Y" ]; then
+            rm -rf '/var/www/ghost'
+            apt-get purge nodejs npm tor
+            apt-get autoclean -y -qq
+            apt-get autoremove -y -qq
+            apt-get update -y -qq
+            apt-get -f install -y -qq
+            rm /etc/init.d/forever
+            clear && echo "Goodbye."
+            exit
+          else
+            clear && echo "Goodbye."
+            exit
+        fi
   fi
+else 
+    >| /etc/tor/torrc #empty the current torrc
+
+  bash -c 'cat << EOF > /etc/tor/torrc
+
+#Log notice file /var/log/tor/notices.log
+RunAsDaemon 1 # Will run tor in the background
+
+HiddenServiceDir /var/lib/tor/ghost/
+HiddenServicePort 80 127.0.0.1:2368
+HiddenServicePort 2368 127.0.0.1:2368 #default ghost port
+
+EOF'
+
 fi
 
-
+    chown -hR debian-tor /var/lib/tor #set ownership for this folder and all subfolders to user debian-tor
+    chmod 0700 /var/lib/tor/ghost
 
 spooky #
 }
 
 function spooky { 
 
+sudo -u debian-tor tor --runasdaemon 1 #run tor to generate a hostname
+
 # map the .onion address to ghost's config file
 
+hostname=$(`cat /var/lib/tor/ghost/hostname`)
+echo $hostname 
 
 
 popcon #disable popularity contest
@@ -205,6 +251,7 @@ function popcon {
         if [[ `lsb_release -is` == "Debian" ]] 
           apt-get purge popularity-contest #not a dependency for Debian
         elif [[ `lsb_release -is` == "Ubuntu" ]]
+            # delete the entire config string, then replace with a "no"
           sed -i '/PARTICIPATE/c\PARTICIPATE="no"' ./etc/popularity-contest.conf
           chmod -x /etc/cron.daily/popularity-contest #I need more info here
     fi
