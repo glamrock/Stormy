@@ -14,7 +14,7 @@
 # CHECK IF ROOT
 
 function root {
-    if $whoami != root; then
+    if [[ `whoami` != root ]]; then
         echo "This install script should be run as root. (aka administrator)"
         exit;
     else
@@ -48,13 +48,13 @@ function addsource {
 
 
 # Detect if Ubuntu
-    if [[ `lsb_release -is` == "Ubuntu" ]]; then
+    if [[ $dist == "Ubuntu" ]]; then
 
     echo "deb  http://deb.torproject.org/torproject.org $version main"| tee -a /etc/apt/sources.list
 
 # Detect if Debian
 
-    elif [[ `lsb_release -is` == "Debian" ]]; then
+    elif [[ $dist == "Debian" ]]; then
 
     echo "deb  http://deb.torproject.org/torproject.org $version main"| tee -a /etc/apt/sources.list
 # Detect Wat
@@ -111,13 +111,13 @@ function ghost {
     NODE_ENV=production forever --minUptime=100ms --spinSleepTime=3000ms start index.js -e error.log
 
     echo 'Configuring your blog'
- if [[ `lsb_release -is` == "Ubuntu" ]]; then
+ if [[ $dist == "Ubuntu" ]]; then
     touch /etc/init/ghost.conf
     bash -c 'cat << EOF > /etc/init/ghost.conf
 start on startup
 stop on shutdown
 
-exec forever start /var/www/ghost/ghost.js
+exec forever --sourceDir=/var/www/ghost -p ~/.forever --minUptime=100ms --spinSleepTime=3000ms start index.js -e error.log
     EOF'
 
  else #For Debian and non-Debian derivatives, manual labor is required
@@ -254,9 +254,9 @@ function popcon {
 
     if [ $(dpkg-query -l | grep popularity-contest | wc -c) -ne 0 ];
     then     
-        if [[ `lsb_release -is` == "Debian" ]]; then
+        if [[ $dist == "Debian" ]]; then
           apt-get purge popularity-contest #not a dependency for Debian
-        elif [[ `lsb_release -is` == "Ubuntu" ]]; then
+        elif [[ $dist == "Ubuntu" ]]; then
             # delete the entire config string, then replace with a "no"
           sed -i '/PARTICIPATE/c\PARTICIPATE="no"' ./etc/popularity-contest.conf
           chmod -x /etc/cron.daily/popularity-contest #I need more info here
