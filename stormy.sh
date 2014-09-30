@@ -78,45 +78,6 @@ function addsource {
     wizard #fly off to the wizard function
 }
 
-#----- INSTALL Wizard / MENU -----#
-function wizard {
-INPUT=0
-    echo ''
-    echo 'MAIN MENU'
-    echo 'What would you like to do? (Enter the number of your choice)'
-    echo ''
-    echo '1. Install hidden service dependencies' # webserver + tor
-    echo '2. Set up a Ghost-based hidden service (blog)'
-    echo '3. Create a wiki using Moinmoin'
-    echo '4. Create a personal cloud server (for files, calendar, tasks)'
-    echo '5. Install a Jabber server'
-    echo '8. View more instructions'
-    echo '9. Exit without installing anything'
-    echo ''
-read INPUT
-
-
-
-# Halper function
-
-function halp {
-	printf "Usage: stormy [-g, --ghost]\n"\
-	"       stormy  (without options will run the wizard)\n"\
-    "Options:\n"\
-    "-g       ghost     Create a Ghost blog installation, or modify an existing one \n"\
-    "-w       website   Install a basic webserver and configure Tor\n"\
-    "--cloud            Setup Cozy Cloud for you to privately manage your tasks & calendar\n"\
-    "-t       tor       Configure Tor hidden service by itself (with no website or content)\n"\
-    "--wiki   moinmoin  Create a wiki \n"\
-    "--jabber           Create a private Jabber server\n"\
-    "-v                 Adjust VirtualHost settings\n"\
-
-    "Advanced Options:\n"\
-    ""
-
-	exit;
-}
-
 #----- Install Ghost and related dependencies -----#
 elif [ "$INPUT" -eq 2 ]; then
     ghost
@@ -213,6 +174,8 @@ EOF'
 #----- Tor Dependencies and creation -----#
 
 torque() { # should this be initiated before the wizard?
+
+
 
 }
 
