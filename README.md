@@ -23,6 +23,12 @@ Stormy
 
 **Reminder:** Always create hidden services on *their own machine*. ***Always***.
 
+###Dependencies
+* Ghost
+ * Python 2.4+
+ * Nodejs
+ * npm: supervisor
+
 ###[Roadmap & Ideas](https://github.com/glamrock/Stormy/blob/master/roadmap_notes.md)
 
 ###License
