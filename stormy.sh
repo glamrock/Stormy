@@ -72,7 +72,7 @@ function addsource {
 elif [ "$INPUT" -eq 2 ]; then
     ghost
 
-ghost() {
+function ghost {
     echo 'Installing dependencies...'
     apt-get build-dep python-defaults -y -qq
     apt-get update -y -qq
@@ -163,7 +163,7 @@ EOF'
 
 #----- Tor Dependencies and creation -----#
 
-torque() { # should this be initiated before the wizard?
+function torque { # should this be initiated before the wizard?
 
 
 
@@ -173,14 +173,14 @@ torque() { # should this be initiated before the wizard?
 
 #----- RSS Reader -----#
 
-rss() {
+function rss {
 
 }
 
 
 #----- XMPP Server -----#
 
-jabber() {
+function jabber {
 
 
     echo "Use the default Jabber configuration file? [Y/n]"
@@ -190,7 +190,7 @@ jabber() {
 
 #----- IRC chat -----#
 
-irc() {
+function irc {
 
     echo "Would you like to install a web-based chat client for your IRC service?"
 
