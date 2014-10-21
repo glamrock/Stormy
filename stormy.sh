@@ -187,16 +187,44 @@ service ghost start #starts ghost again
 
 EOF'
 
-
-
-
 spooky
 
 }
 
-# Generate the hidden service address to display to user later
-
 function spooky { 
+
+# set nginx config
+# this includes sending all errors (except 300/301) back to the front page
+# with a code of 200 OK
+
+  bash -c 'cat << EOF > /etc/nginx/sites-available/ghost
+server {  
+    listen 80;
+    server_name localhost;
+
+    location / {
+            proxy_pass http://127.0.0.1:2368;
+            proxy_set_header Host $host;
+            proxy_buffering off;
+    }
+
+    error_page 500 501 502 503 504 505 506 507 508 509 510 =200 /;
+    error_page 302 303 304 305 306 307 =200 /;
+    error_page 400 401 402 403 404 405 406 407 408 409 410 =200 /;
+    error_page 411 412 413 414 415 416 417 418 419 420 421 =200 /;
+    error_page 422 423 424 425 426 =200 /;
+
+    location ^~ /error/ {
+        internal;
+        root /var/www/ghost;
+    }
+}
+EOF'
+
+ln -s /etc/nginx/sites-available/ghost /etc/nginx/sites-enabled/ghost  
+service nginx restart 
+
+# Generate the hidden service address to display to user later
 
     echo 'Generating .onion address'
     sudo -u debian-tor tor --runasdaemon 1 #run tor to generate a hostname
@@ -212,6 +240,7 @@ function spooky {
 
 popcon #disable popularity contest
 }
+
 
 
 #----- Tor Dependencies and creation -----#
