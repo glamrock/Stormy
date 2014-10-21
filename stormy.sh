@@ -11,7 +11,6 @@
 #   run script as root to install a service and set it as a hidden service
 # =========================================================================== #
 
-
 # CHECK IF ROOT
 
 function root {
@@ -23,7 +22,6 @@ function root {
         keyfob
     fi
 }
-
 
 #----- VARIOUS ITEMS -----#
 version=$(lsb_release -cs)
@@ -50,14 +48,8 @@ function addsource {
     cp /etc/apt/sources.list /etc/apt/sources.list.original #backup original sources file
 
 
-# Detect if Ubuntu
-    if [[ `lsb_release -is` == "Ubuntu" ]]
-
-    echo "deb  http://deb.torproject.org/torproject.org $version main"| tee -a /etc/apt/sources.list
-
-# Detect if Debian
-
-    elif [[ `lsb_release -is` == "Debian" ]]
+# Detect if Ubuntu or Debian
+    if [[ $dist == "Ubuntu" ]]||[[ $dist == "Debian" ]]; then
 
     echo "deb  http://deb.torproject.org/torproject.org $version main"| tee -a /etc/apt/sources.list
 # Detect Wat
