@@ -187,6 +187,79 @@ service ghost start #starts ghost again
 
 EOF'
 
+seance
+
+}
+
+function seance {
+
+    echo 'Configuring your Tor Hidden Service'
+
+# overwrite the existing torrc, but check if it contains an existing hs first
+
+if ! grep -qw "#HiddenServiceDir /var/lib/tor/hidden_service" /etc/tor/torrc; then
+    echo "You are about to replace an existing tor configuration file."
+    echo 'Continue? (Y)es  /  (N)o' 
+    read -p '' REPLY
+
+  if [ "$REPLY" == "y" ]||[ "$REPLY" == "Y" ]; then
+    cp /etc/tor/torrc /etc/tor/torrc.original
+    >| /etc/tor/torrc #truncate the torrc
+
+  bash -c 'cat << EOF > /etc/tor/torrc
+
+#Log notice file /var/log/tor/notices.log
+RunAsDaemon 1 # Will run tor in the background
+
+HiddenServiceDir /var/lib/tor/ghost/
+HiddenServicePort 80 127.0.0.1:2368
+HiddenServicePort 2368 127.0.0.1:2368 #default ghost port
+
+EOF'
+
+
+  else #no - cancels hs setup
+      echo "Stormy will now cancel hidden service setup. However, your blog is still installed."
+            echo 'Delete blog? (Y)es  /  (N)o' 
+            read -p '' SEANCE
+          if [ "$SEANCE" == "y" ]||[ "$SEANCE" == "Y" ]; then
+            rm -rf '/var/www/ghost'
+            apt-get purge nodejs npm tor
+            apt-get autoclean -y -qq
+            apt-get autoremove -y -qq
+            apt-get update -y -qq
+            apt-get -f install -y -qq
+            rm /etc/init.d/forever
+            clear && echo "Goodbye."
+            exit
+          else
+            clear && echo "Goodbye."
+            exit
+        fi
+  fi
+else 
+    >| /etc/tor/torrc #empty the current torrc
+
+  bash -c 'cat << EOF > /etc/tor/torrc
+
+#Log notice file /var/log/tor/notices.log
+RunAsDaemon 1 # Will run tor in the background
+
+HiddenServiceDir /var/lib/tor/ghost/
+HiddenServicePort 80 127.0.0.1:2368
+HiddenServicePort 2368 127.0.0.1:2368 #default ghost port
+
+EOF'
+
+fi
+
+    chown -hR debian-tor /var/lib/tor #set ownership for this folder and all subfolders to user debian-tor
+    chmod 0700 /var/lib/tor/ghost 
+
+    sed -i '/RUN_DAEMON="no"/c\RUN_DAEMON="yes"' ./etc/default/tor #allow to start on boot, even if it was previously set to no
+    update-rc.d tor defaults
+    echo 'Your hidden service will start on boot.'
+
 spooky
 
 }
@@ -223,6 +296,7 @@ EOF'
 
 ln -s /etc/nginx/sites-available/ghost /etc/nginx/sites-enabled/ghost  
 service nginx restart 
+
 
 # Generate the hidden service address to display to user later
 
