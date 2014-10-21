@@ -103,18 +103,6 @@ function ghost {
     cd ghost
     npm install --production #this installs Ghost
 
-# Meddling with uncaught nodejs exceptions
-
-# Do I want to tack this on to index.js?  In the cause of uncaught exceptions,
-# it would force-crash Ghost and forever would bring it back up within 3 seconds
-
-# process.on('uncaughtException', function (err) {
-#  console.error((new Date).toUTCString() + ' uncaughtException:', err.message)
-#  console.error(err.stack)
-#  process.exit(1)
-#})
-
-
 # Start Ghost and set Forever
     cd /var/www/ghost
     NODE_ENV=production forever --minUptime=100ms --spinSleepTime=3000ms start index.js -e error.log
