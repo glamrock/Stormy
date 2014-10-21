@@ -388,7 +388,7 @@ cleanup
 
 #----- Cleanup -----#
 # elif [ "$INPUT" -eq 4 ]; then
-
+function cleanup {
     clear
     echo ''
     echo 'Finishing up!'
@@ -403,13 +403,22 @@ cleanup
     apt-get autoremove -y -qq
     echo 'Cleaning up temporary cache...'
     apt-get clean -y -qq
-    echo 'Done.'
+    echo 'Done!'
     sleep 5
-
     clear
 
-log #go to the logout function, just make sure it appears above this entry
+    echo "Please take a moment to write down your hidden service address."
+    echo ""
+    echo "Your onion address is":  "$hostname"
+    echo ""
+    echo "To access your blog dashboard, go to $hostname/ghost"
+    echo ""
+    echo "Your hidden service's private key is located in /var/lib/tor/ghost"
+    sleep 10
 
+
+log #kick to logoff/reboot function
+}
 
 #----- Logout Dialogue -----#
 
