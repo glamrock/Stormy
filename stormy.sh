@@ -414,10 +414,12 @@ log #go to the logout function, just make sure it appears above this entry
 #----- Logout Dialogue -----#
 
 function log {
-    echo 'Please reboot if possible. Your hidden service will start automatically.'
-    read -p "(O)kay! / (I) can't yet.    " REPLY 
+   echo 'Please reboot if possible. Your hidden service will start automatically.'
+    echo "(O)kay! / (I) can't yet."
+    read -p "" REPLY 
+    echo ""
 
-if [ "$REPLY" == "o" ]||[ "$REPLY" == "O" ]; then
+if [ "$REPLY" = "o" ]||[ "$REPLY" = "O" ]; then
     shutdown -r +1 "Rebooting!"
 
 else
