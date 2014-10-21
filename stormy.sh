@@ -143,7 +143,7 @@ exec forever --sourceDir=/var/www/ghost -p ~/.forever --minUptime=100ms --spinSl
 
     exit 0
 EOF'
-
+fi
     chmod +x /etc/init.d/forever
     ln -s /etc/init.d/forever /etc/rc.d/
     update-rc.d forever defaults #forever+ghost will now rise on boot
