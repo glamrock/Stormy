@@ -8,9 +8,7 @@
 # https://github.com/glamrock/Stormy
 # 
 # Usage: 
-#   stormy (runs guided wizard)
-#   stormy [options] [$nick]
-#   stormy --purge [$nick]  (attempts to delete a hidden service and content)
+#   run script as root to install a service and set it as a hidden service
 # =========================================================================== #
 
 
