@@ -95,6 +95,7 @@ function ghost {
 
 # Get and install Ghost
 
+    echo 'Installing your blog'
     cd /var/www
     wget -O ghost.zip https://ghost.org/zip/ghost-latest.zip
     unzip -d ghost ghost.zip
@@ -118,13 +119,14 @@ function ghost {
     cd /var/www/ghost
     NODE_ENV=production forever --minUptime=100ms --spinSleepTime=3000ms start index.js -e error.log
 
- if [[ `lsb_release -is` == "Ubuntu" ]]
+    echo 'Configuring your blog'
+ if [[ $dist == "Ubuntu" ]]; then
     touch /etc/init/ghost.conf
     bash -c 'cat << EOF > /etc/init/ghost.conf
 start on startup
 stop on shutdown
 
-exec forever start /var/www/ghost/ghost.js
+exec forever --sourceDir=/var/www/ghost -p ~/.forever --minUptime=100ms --spinSleepTime=3000ms start index.js -e error.log
     EOF'
 
  else #For Debian and non-Debian derivatives, manual labor is required
@@ -155,10 +157,28 @@ EOF'
     ln -s /etc/init.d/forever /etc/rc.d/
     update-rc.d forever defaults #forever+ghost will now rise on boot
 
-# kick over to popcon
-    popcon
+spooky
+
 }
 
+# Generate the hidden service address to display to user later
+
+function spooky { 
+
+    echo 'Generating .onion address'
+    sudo -u debian-tor tor --runasdaemon 1 #run tor to generate a hostname
+
+    hostname=$(cat /var/lib/tor/ghost/hostname)
+    echo "Your onion address is":  "$hostname"
+
+# map the .onion address to ghost's config file
+
+    cp /var/www/ghost/config.example.js /var/www/ghost/config.js
+
+    sed -i "s/my-ghost-blog.com/$hostname/" /var/www/ghost/config.js   
+
+popcon #disable popularity contest
+}
 
 
 #----- Tor Dependencies and creation -----#
@@ -187,6 +207,9 @@ function jabber {
     
 }
 
+function tac {
+
+}
 
 #----- IRC chat -----#
 
