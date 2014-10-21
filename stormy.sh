@@ -93,7 +93,7 @@ function ghost {
 # Debian users are less nervous than Ubuntu users, but still.
     echo 'Dependencies installed!'
 
-# Get and install Ghost
+# Get and install Ghost from source
 
     echo 'Installing your blog'
     cd /var/www
@@ -102,6 +102,9 @@ function ghost {
     rm ghost.zip
     cd ghost
     npm install --production #this installs Ghost
+
+# Install nginx
+    apt-get install nginx
 
 # Start Ghost and set Forever
     cd /var/www/ghost
