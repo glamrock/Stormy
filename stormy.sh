@@ -148,7 +148,6 @@ fi
     ln -s /etc/init.d/forever /etc/rc.d/
     update-rc.d forever defaults #forever+ghost will now rise on boot
 
-
 #backup content on a regular basis
 
   mkdir /var/lib/tor/backups
