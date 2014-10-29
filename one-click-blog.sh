@@ -362,7 +362,7 @@ function cleanup {
     echo 'Cleaning up temporary cache...'
     apt-get clean -y -qq
     echo 'Done!'
-    sleep 1
+    sleep 5
     clear
 
     echo "Please take a moment to write down your hidden service address."

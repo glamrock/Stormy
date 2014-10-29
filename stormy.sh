@@ -68,9 +68,69 @@ function addsource {
     wizard #fly off to the wizard function
 }
 
+
+#----- INSTALL Wizard / MENU -----#
+function wizard {
+INPUT=0
+    echo ''
+    echo 'MAIN MENU'
+    echo 'What would you like to do? (Enter the number of your choice)'
+    echo ''
+    echo '1. Install hidden service dependencies' # webserver + tor
+    echo '2. Set up a Ghost-based hidden service (blog)'
+    echo '3. Create a wiki using Moinmoin'
+    echo '4. Create a personal cloud server (for files, calendar, tasks)'
+    echo '5. Install a Jabber server'
+    echo '6. Install a IRC server'
+    echo '7. Install an RSS reader'
+    echo '8. View more instructions'
+    echo 'X. Exit without installing anything'
+    echo ''
+read INPUT
+
+## set hstype=$(whatever) depending on which selected
+## ask for hsnick at some point, and set it ("Set a nickname for this hidden service? [Y/n]")
+
+    elif [ "$INPUT" -eq 1 ]; then
+        hstype=$(basic)
+        basic
+
+    elif [ "$INPUT" -eq 2 ]; then
+        hstype=$(ghost)
+        ghost
+
+    elif [ "$INPUT" -eq 3 ]; then
+        hstype=$(wiki)
+        moinmoin
+
+    elif [ "$INPUT" -eq 4 ]; then
+        hstype=$(cozy)
+        cloud
+
+    elif [ "$INPUT" -eq 5 ]; then
+        hstype=$(jabber)
+        jabber
+
+    elif [ "$INPUT" -eq 6 ]; then
+        hstype=$(irc)
+        irc
+
+    elif [ "$INPUT" -eq 7 ]; then
+        hstype=$(rss)
+        rss
+
+    elif [ "$INPUT" -eq 8 ]; then
+        man 
+
+    elif [ "$INPUT" -eq X ]||[ "$INPUT" -eq x ]; then
+        clear && end #goes to end function
+    else
+        clear && exit
+}
+
+
+
 #----- Install Ghost and related dependencies -----#
-elif [ "$INPUT" -eq 2 ]; then
-    ghost
 
 function ghost {
     echo 'Installing dependencies...'
@@ -359,9 +419,9 @@ function irc {
 #   Mopidy is undergoing heavy development
 #   So it would need to be built from github source
 #   
-#radio() {
+# function radio {
+# 
 #}
-
 
 
 #----- DISABLE POPULARITY -----#
@@ -384,7 +444,6 @@ function popcon {
 
 cleanup
 }
-
 
 #----- Cleanup -----#
 # elif [ "$INPUT" -eq 4 ]; then
@@ -440,9 +499,10 @@ fi
 
 #----- Man Page -----#
 
-elif [ "$INPUT" -eq 8 ]; then
+function man {
     echo 'You have exited the wizard.'
     man stormy
+}
 
 #----- Exit Dialogue -----#
 
@@ -457,13 +517,7 @@ function end {
 
 }
 
-# Return
-# elif [ $INPUT -eq 9 ]; then
-#    clear && wizard
-
-elif [ "$INPUT" -eq 9 ]; then
-    clear && end
-fi
+fi # end of the wizard
 }
 
 root #start at the beginning
