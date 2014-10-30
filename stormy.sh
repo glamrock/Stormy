@@ -91,7 +91,7 @@ read INPUT
 ## set hstype=$(whatever) depending on which selected
 ## ask for hsnick at some point, and set it ("Set a nickname for this hidden service? [Y/n]")
 
-    elif [ "$INPUT" -eq 1 ]; then
+    if [ "$INPUT" -eq 1 ]; then
         hstype=$(basic)
         basic
 
@@ -126,6 +126,7 @@ read INPUT
         clear && end #goes to end function
     else
         clear && exit
+    fi 
 }
 
 
@@ -137,7 +138,7 @@ function ghost {
     apt-get build-dep python-defaults -y -qq
     apt-get update -y -qq
     apt-get install iptables python python-dev python-software-properties -y -qq
-    apt-get install tor
+    apt-get install tor -y -qq
 
 # NODE
     apt-get install g++ make nodejs -y -qq
@@ -381,7 +382,7 @@ popcon #disable popularity contest
 
 function torque { # should this be initiated before the wizard?
 
-
+  true 
 
 }
 
@@ -390,7 +391,7 @@ function torque { # should this be initiated before the wizard?
 #----- RSS Reader -----#
 
 function rss {
-
+    true
 }
 
 
@@ -398,12 +399,29 @@ function rss {
 
 function jabber {
 
-
     echo "Use the default Jabber configuration file? [Y/n]"
-    
+      read -p '' JAB
+      if [ "$JAB" == "y" ]||[ "$JAB" == "Y" ]; then
+      # edit nginx and ejabberd conf files
+
+        true 
+
+        echo "Would you like to install a web-based chat client for your IRC service? [y/N]"
+          read -p '' STAC
+          if [ "$STAC" == "y" ]||[ "$STAC" == "Y" ]; then
+
+            true
+
+          else
+            popcon 
+        fi      #end of chat-client setup
+
+      fi    # end of jabber configuration 
 }
 
 function tac {
+
+    true
 
 }
 
@@ -415,6 +433,7 @@ function irc {
 
 }
 
+
 #----- Mopidy Radio Streaming  -----#
 #   Mopidy is undergoing heavy development
 #   So it would need to be built from github source
@@ -422,6 +441,8 @@ function irc {
 # function radio {
 # 
 #}
+
+
 
 
 #----- DISABLE POPULARITY -----#
@@ -435,18 +456,20 @@ function popcon {
 
     if [ $(dpkg-query -l | grep popularity-contest | wc -c) -ne 0 ];
     then     
-        if [[ `lsb_release -is` == "Debian" ]] 
+        if [[ `lsb_release -is` == "Debian" ]];then
           apt-get purge popularity-contest #not a dependency for Debian
-        elif [[ `lsb_release -is` == "Ubuntu" ]]
+        elif [[ `lsb_release -is` == "Ubuntu" ]];then
           sed -i '/PARTICIPATE/c\PARTICIPATE="no"' ./etc/popularity-contest.conf
           chmod -x /etc/cron.daily/popularity-contest #I need more info here
+        fi
+    else
+        cleanup
     fi
 
 cleanup
 }
 
 #----- Cleanup -----#
-# elif [ "$INPUT" -eq 4 ]; then
 function cleanup {
     clear
     echo ''
@@ -482,7 +505,7 @@ log #kick to logoff/reboot function
 #----- Logout Dialogue -----#
 
 function log {
-   echo 'Please reboot if possible. Your hidden service will start automatically.'
+    echo 'Please reboot if possible. Your hidden service will start automatically.'
     echo "(O)kay! / (I) can't yet."
     read -p "" REPLY 
     echo ""
@@ -515,9 +538,6 @@ function end {
         clear && exit
     fi
 
-}
-
-fi # end of the wizard
 }
 
 root #start at the beginning
