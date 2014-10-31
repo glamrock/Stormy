@@ -122,7 +122,7 @@ read INPUT
     elif [ "$INPUT" -eq 8 ]; then
         man 
 
-    elif [ "$INPUT" -eq X ]||[ "$INPUT" -eq x ]; then
+    elif [ "$INPUT" = X ]||[ "$INPUT" = x ]; then
         clear && end #goes to end function
     else
         clear && exit
@@ -454,13 +454,15 @@ function popcon {
 # not destroy the system. It is also toggled off by default: PARTICIPATE="no"
 # http://ubuntuforums.org/showthread.php?t=1654103 gives me pause.
 
-    if [ $(dpkg-query -l | grep popularity-contest | wc -c) -ne 0 ];
+    if [ "$(dpkg-query -l | grep -c popularity-contest)" -ne 0 ];
     then     
         if [[ `lsb_release -is` == "Debian" ]];then
-          apt-get purge popularity-contest #not a dependency for Debian
+          apt-get purge popularity-contest -y -qq #not a dependency for Debian
+          cleanup
         elif [[ `lsb_release -is` == "Ubuntu" ]];then
           sed -i '/PARTICIPATE/c\PARTICIPATE="no"' ./etc/popularity-contest.conf
           chmod -x /etc/cron.daily/popularity-contest #I need more info here
+          cleanup
         fi
     else
         cleanup
