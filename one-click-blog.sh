@@ -94,9 +94,9 @@ function ghost {
 
     echo 'Installing your blog'
     cd /var/www
-    wget -O ghost.zip https://ghost.org/zip/ghost-latest.zip
-    unzip -d ghost ghost.zip
-    rm ghost.zip
+    wget https://ghost.org/zip/ghost-latest.zip --quiet --server-response --timestamping --ignore-length
+    unzip -d ghost ghost-latest.zip
+    rm ghost-latest.zip
     cd ghost
     npm install --production #this installs Ghost
 
@@ -162,7 +162,7 @@ bash -c 'cat <<EOF> /etc/cron.daily/ghost
 
 cd /var/www/ghost
 
-wget https://ghost.org/zip/ghost-latest.zip --timestamping --ignore-length --no-verbose
+wget https://ghost.org/zip/ghost-latest.zip --timestamping --ignore-length --quiet
 unzip -d ghost-update ghost-latest.zip
 
 service ghost stop #stop ghost before updating
