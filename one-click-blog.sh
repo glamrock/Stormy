@@ -69,7 +69,7 @@ function addsource {
 
 # Update after the new sources
         apt-get update -y -qq
-        apt-get install deb.torproject.org-keyring #better safe than sorry
+        apt-get install deb.torproject.org-keyring -y -qq #better safe than sorry
         echo 'Done.'
 
     ghost #head to ghost install function
@@ -82,14 +82,16 @@ function ghost {
     apt-get build-dep python-defaults -y -qq
     apt-get update -y -qq
     apt-get install iptables python python-dev python-software-properties -y -qq
-    apt-get install tor nginx
+    apt-get install tor nginx -y -qq
 
 # NODE
     apt-get install g++ make nodejs -y -qq
     apt-get update -y -qq
     apt-get install npm -y -qq
-    npm install forever -g
-    npm install ghost -g
+    npm install forever -g --silent
+    npm install ghost -g --silent
+    npm config set loglevel warn # sets the log to only log warnings and above - good to reduce noise
+
 
 # Double-check for broken deps before finishing up
     echo 'Checking integrity...'
@@ -375,6 +377,8 @@ function cleanup {
     echo ""
     echo "To access your blog dashboard, go to $hostname/ghost"
     echo ""
+    echo "To easily download a copy of your posts, go to $hostname/debug"
+    echo ""
     echo "Your hidden service's private key is located in /var/lib/tor/ghost"
     sleep 10
 
@@ -385,7 +389,7 @@ log #kick to logoff/reboot function
 #----- Logout Dialogue -----#
 
 function log {
-   echo 'Please reboot if possible. Your hidden service will start automatically.'
+    echo 'Please reboot if possible. Your hidden service will start automatically.'
     echo "(O)kay! / (I) can't yet."
     read -p "" REPLY 
     echo ""
