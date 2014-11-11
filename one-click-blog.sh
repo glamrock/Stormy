@@ -30,7 +30,9 @@ dist=$(lsb_release -is)
 #----- ADD DEVELOPER KEYS -----#
 
 function keyfob {
-    gpg --keyserver keys.mayfirst.org --recv-keys 136221EE520DDFAF0A905689B9316A7BC7917B12 #node
+
+#NodeJS
+    gpg --keyserver keys.mayfirst.org --recv-keys 136221EE520DDFAF0A905689B9316A7BC7917B12
 
 # Tor build keys
     gpg --keyserver keys.mayfirst.org --recv-keys 74A941BA219EC810 A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89
@@ -268,7 +270,7 @@ fi
 server #
 }
 
-function server {
+function server {  # Replace nginx with something else, but keep the same response codes
 
 # set nginx config
 # this includes sending all errors (except 300/301) back to the front page
