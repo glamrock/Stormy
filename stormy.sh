@@ -150,8 +150,10 @@ function ghost {
     apt-get install g++ make nodejs -y -qq
     apt-get update -y -qq
     apt-get install npm -y -qq
-    npm install forever -g
-    npm install ghost -g
+    npm install forever -g --silent
+    npm install ghost -g --silent
+    npm config set loglevel warn # sets the log to only log warnings and above - good to reduce unnecessary noise
+
 
 # Double-check for broken deps before finishing up
     echo 'Checking integrity...'
@@ -171,7 +173,7 @@ function ghost {
     npm install --production #this installs Ghost
 
 # Install nginx
-    apt-get install nginx
+    apt-get install nginx -y -qq 
 
 # Start Ghost and set Forever
     cd /var/www/ghost
@@ -502,6 +504,8 @@ function cleanup {
     echo "Your onion address is":  "$hostname"
     echo ""
     echo "To access your blog dashboard, go to $hostname/ghost"
+    echo ""
+    echo "To easily download a copy of your posts, go to $hostname/debug"
     echo ""
     echo "Your hidden service's private key is located in /var/lib/tor/ghost"
     sleep 10
