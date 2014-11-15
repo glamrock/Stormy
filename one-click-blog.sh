@@ -221,7 +221,7 @@ if ! grep -qw "#HiddenServiceDir /var/lib/tor/hidden_service" /etc/tor/torrc; th
 RunAsDaemon 1 # Will run tor in the background
 
 HiddenServiceDir /var/lib/tor/ghost/
-HiddenServicePort 80 127.0.0.1:2368
+# HiddenServicePort 80 127.0.0.1:80 # uncomment if creating a clearnet website.
 HiddenServicePort 2368 127.0.0.1:2368 #default ghost port
 
 EOF'
@@ -255,7 +255,7 @@ else
 RunAsDaemon 1 # Will run tor in the background
 
 HiddenServiceDir /var/lib/tor/ghost/
-HiddenServicePort 80 127.0.0.1:2368
+# HiddenServicePort 80 127.0.0.1:80 # uncomment if creating a clearnet website.
 HiddenServicePort 2368 127.0.0.1:2368 #default ghost port
 
 EOF'
@@ -263,6 +263,7 @@ EOF'
 fi
 
     chown -hR debian-tor /var/lib/tor #set ownership for this folder and all subfolders to user debian-tor
+    mkdir /var/lib/tor/ghost
     chmod 0700 /var/lib/tor/ghost 
 
     sed -i '/RUN_DAEMON="no"/c\RUN_DAEMON="yes"' ./etc/default/tor #allow to start on boot, even if it was previously set to no
