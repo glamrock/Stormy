@@ -345,7 +345,7 @@ popcon #disable popularity contest
 #----- Tor Dependencies and creation -----#
 
 function torque { # should this be initiated before the wizard?
-
+ 
   true 
 
 }
