@@ -333,7 +333,7 @@ spooky
 
 }
 
-function spooky { 
+function spooky { # swap nginx for apache
 
 # set nginx config
 # this includes sending all errors (except 300/301) back to the front page
