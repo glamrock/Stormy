@@ -398,17 +398,6 @@ function irc {
 }
 
 
-#----- Mopidy Radio Streaming  -----#
-#   Mopidy is undergoing heavy development
-#   So it would need to be built from github source
-#   
-# function radio {
-# 
-#}
-
-
-
-
 #----- DISABLE POPULARITY -----#
 
 function popcon {
