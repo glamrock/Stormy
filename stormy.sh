@@ -45,14 +45,12 @@ function keyfob {
 addsource
 }
 
-
 #----- ADD SOFTWARE SOURCES -----#
 
 function addsource {
 # Adds sources for various dependencies
     echo 'Adding software sources'
     cp /etc/apt/sources.list /etc/apt/sources.list.original #backup original sources file
-
 
 # Detect if Ubuntu or Debian
     if [[ $dist == "Ubuntu" ]]||[[ $dist == "Debian" ]]; then
@@ -69,11 +67,11 @@ function addsource {
 # Update after the new sources
         apt-get update -y -qq
         apt-get install deb.torproject.org-keyring #better safe than sorry
+        apt-get update -y -qq
         echo 'Done.'
 
     wizard #fly off to the wizard function
 }
-
 
 #----- INSTALL Wizard / MENU -----#
 function wizard {
@@ -84,7 +82,7 @@ INPUT=0
     echo ''
     echo '1. Install hidden service dependencies' # webserver + tor
     echo '2. Set up a Ghost-based hidden service (blog)'
-    echo '3. Create a wiki using Moinmoin'
+    echo '3. Create a wiki using MediaWiki'
     echo '4. Create a personal cloud server (for files, calendar, tasks)'
     echo '5. Install a Jabber server'
     echo '6. Install a IRC server'
@@ -500,4 +498,3 @@ function end {
 root #start at the beginning
 
 ## END OF TRANSMISSION ##
-
