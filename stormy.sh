@@ -377,8 +377,11 @@ function jabber {
 function irc {
 
     echo "Would you like to install a web-based chat client for your IRC service?"
+      read -p '' IRC
+      if [ "$IRC" == "Y" ]||[ "$IRC" == "y" ]
 
 }
+
 
 
 #----- DISABLE POPULARITY -----#
