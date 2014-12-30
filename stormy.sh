@@ -82,7 +82,6 @@ INPUT=0
     echo ''
     echo '1. Install hidden service dependencies' # webserver + tor
     echo '2. Set up a Ghost-based hidden service (blog)'
-    echo '3. Create a wiki using MediaWiki'
     echo '4. Create a personal cloud server (for files, calendar, tasks)'
     echo '5. Install a Jabber server'
     echo '6. Install a IRC server'
@@ -102,10 +101,6 @@ read INPUT
     elif [ "$INPUT" -eq 2 ]; then
         hstype=$(ghost)
         ghost
-
-    elif [ "$INPUT" -eq 3 ]; then
-        hstype=$(wiki)
-        moinmoin
 
     elif [ "$INPUT" -eq 4 ]; then
         hstype=$(cozy)
