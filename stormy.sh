@@ -82,11 +82,11 @@ INPUT=0
     echo ''
     echo '1. Install hidden service dependencies' # webserver + tor
     echo '2. Set up a Ghost-based hidden service (blog)'
-    echo '4. Create a personal cloud server (for files, calendar, tasks)'
-    echo '5. Install a Jabber server'
-    echo '6. Install a IRC server'
-    echo '7. Install an RSS reader'
-    echo '8. View more instructions'
+    echo '3. Create a personal cloud server (for files, calendar, tasks)'
+    echo '4. Install a Jabber server'
+    echo '5. Install a IRC server'
+    echo '6. Install an RSS reader'
+    echo '7. View more instructions'
     echo 'X. Exit without installing anything'
     echo ''
 read INPUT
@@ -102,23 +102,23 @@ read INPUT
         hstype=$(ghost)
         ghost
 
-    elif [ "$INPUT" -eq 4 ]; then
+    elif [ "$INPUT" -eq 3 ]; then
         hstype=$(cozy)
         cloud
 
-    elif [ "$INPUT" -eq 5 ]; then
+    elif [ "$INPUT" -eq 4 ]; then
         hstype=$(jabber)
         jabber
 
-    elif [ "$INPUT" -eq 6 ]; then
+    elif [ "$INPUT" -eq 5 ]; then
         hstype=$(irc)
         irc
 
-    elif [ "$INPUT" -eq 7 ]; then
+    elif [ "$INPUT" -eq 6 ]; then
         hstype=$(rss)
         rss
 
-    elif [ "$INPUT" -eq 8 ]; then
+    elif [ "$INPUT" -eq 7 ]; then
         man 
 
     elif [ "$INPUT" = X ]||[ "$INPUT" = x ]; then
