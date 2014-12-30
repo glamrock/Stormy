@@ -119,12 +119,15 @@ read INPUT
         rss
 
     elif [ "$INPUT" -eq 7 ]; then
-        man 
+        man
 
     elif [ "$INPUT" = X ]||[ "$INPUT" = x ]; then
         clear && end #goes to end function
+
     else
-        clear && exit
+        clear
+        echo 'Wrong option. Try again.'
+        exit
     fi 
 }
 
@@ -322,20 +325,13 @@ fi
     update-rc.d tor defaults
     echo 'Your hidden service will start on boot.'
 
-spooky
-
-}
-
-function spooky { # swap nginx for apache 
-
-    true
-
 popcon #disable popularity contest
+
 }
 
 
 
-#----- Tor Dependencies and creation -----#
+#----- Tor Dependencies and creation -----# 
 
 function torque { # should this be initiated before the wizard?
  
@@ -350,7 +346,6 @@ function torque { # should this be initiated before the wizard?
 function rss {
     true
 }
-
 
 #----- XMPP Server -----#
 
@@ -367,7 +362,7 @@ function jabber {
           read -p '' STAC
           if [ "$STAC" == "y" ]||[ "$STAC" == "Y" ]; then
 
-            true
+            hstype=$(rss)
 
           else
             popcon 
@@ -376,11 +371,6 @@ function jabber {
       fi    # end of jabber configuration 
 }
 
-function tac {
-
-    true
-
-}
 
 #----- IRC chat -----#
 
