@@ -1,0 +1,6 @@
+include StormyApps README.txt
+
+recursive-include Stormy/assets/how_to *.html
+recursive-include Stormy/assets/images *.png
+recursive-include Stormy/assets/shell_script/installer *.sh
+recursive-include Stormy/assets/shell_script/visit_service *.sh
