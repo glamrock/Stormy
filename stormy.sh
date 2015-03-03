@@ -311,7 +311,7 @@ else
 RunAsDaemon 1 # Will run tor in the background
 
 HiddenServiceDir /var/lib/tor/ghost/
-HiddenServicePort 80 127.0.0.1:2368
+HiddenServicePort 80 127.0.0.1:80
 HiddenServicePort 2368 127.0.0.1:2368 #default ghost port
 
 EOF'
@@ -379,6 +379,10 @@ function irc {
     echo "Would you like to install a web-based chat client for your IRC service?"
       read -p '' IRC
       if [ "$IRC" == "Y" ]||[ "$IRC" == "y" ]
+        hstype=$(IRC)
+
+      else 
+        
 
 }
 
