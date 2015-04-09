@@ -1,11 +1,11 @@
 
 ##Notice
-Stormy is currently under heavy development.  Please do not use until this notice disappears.
+Stormy is currently under heavy development, and only usable by developers.
 
 Stormy
 =========
 
-*Stormy* is a wizard to help people create Tor Hidden Services with just a couple of clicks. Currently, it's setup to install Ghost (a swanky nodejs-based blog platform). 
+*Stormy* is a wizard to help people create Tor Hidden Services with just a couple of clicks. Originally, it was setup to install Ghost (a swanky nodejs-based blog platform), but has since expanded to include Jabber, IRC, Cozy (personal cloud), and Diaspora (social media) options.
 
 
 ##Options
