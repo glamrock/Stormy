@@ -85,7 +85,6 @@ INPUT=0
     echo '3. Create a personal cloud server (for files, calendar, tasks)'
     echo '4. Install a Jabber server'
     echo '5. Install a IRC server'
-    echo '6. Install an RSS reader'
     echo '7. View more instructions'
     echo 'X. Exit without installing anything'
     echo ''
@@ -113,10 +112,6 @@ read INPUT
     elif [ "$INPUT" -eq 5 ]; then
         hstype=$(irc)
         irc
-
-    elif [ "$INPUT" -eq 6 ]; then
-        hstype=$(rss)
-        rss
 
     elif [ "$INPUT" -eq 7 ]; then
         man
@@ -341,12 +336,6 @@ function torque { # should this be initiated before the wizard?
 
 
 
-#----- RSS Reader -----#
-
-function rss {
-    true
-}
-
 #----- XMPP Server -----#
 
 function jabber {
@@ -362,7 +351,7 @@ function jabber {
           read -p '' STAC
           if [ "$STAC" == "y" ]||[ "$STAC" == "Y" ]; then
 
-            hstype=$(rss)
+            hstype=$(jab)
 
           else
             popcon 
