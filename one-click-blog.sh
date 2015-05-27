@@ -255,7 +255,7 @@ EOF
             apt-get autoremove -y -qq
             apt-get update -y -qq
             apt-get -f install -y -qq
-            rm /etc/init.d/forever
+            rm /etc/init.d/forever  #this will call a collision if there was already a forever init.d
             clear && echo "Goodbye."
             exit
           else
