@@ -251,7 +251,6 @@ EOF
             read -p '' SEANCE
           if [ "$SEANCE" == "y" ]||[ "$SEANCE" == "Y" ]; then
             rm -rf '/var/www/ghost'
-            apt-get purge nodejs npm tor
             apt-get autoclean -y -qq
             apt-get autoremove -y -qq
             apt-get update -y -qq
