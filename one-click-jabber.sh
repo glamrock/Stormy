@@ -394,48 +394,28 @@ EOF
 
   mkdir /var/lib/tor/backups
 
-  cat <<EOF > /etc/cron.monthly/ghost-backup
+  cat <<EOF > /etc/cron.monthly/ejabberd
 #!/bin/sh
 
-for file in /var/www/ghost/content/data/*.db;
-	do cp "\$file" /var/lib/tor/backups/"\${file}-ghost-\`date +%Y-%m\`";
+sudo -u ejabberd ejabberdctl --node ejabberd backup /var/lib/tor/backups/"\${file}-jabber-\`date +%Y-%m\`.dmp"
 done
 
 EOF
 
 #check for updates, and if they exist, execute them
 
-cat <<EOF > /etc/cron.daily/ghost
+cat <<EOF > /etc/cron.daily/ejabberd
 #!bin/sh
-
-cd /var/www/ghost
-
-wget https://ghost.org/zip/ghost-latest.zip --timestamping --ignore-length --quiet
-unzip -d ghost-update ghost-latest.zip
-
-service ghost stop #stop ghost before updating
-
-cp ghost-update/*.md ghost-update/*.js ghost-update/*.json ..
-rm -R core
-cp -R ghost-update/core ..
-cp -R ghost-update/content/themes/caspar content/themes
-chown -R ghost:ghost /var/www/ghost
-
-npm install --production
-
-rm -R ghost-update
-
-service ghost start #starts ghost again
+done
 
 EOF
 
 # ensure cron scripts have execution permissions
-chmod 0755 /etc/cron.monthly/ghost-backup /etc/cron.daily/ghost
+chmod 0755 /etc/cron.monthly/ejabberd /etc/cron.daily/ejabberd
 
-# kick over to tor 
-    torque
+# time to finish up
+    cleanup
 }
-
 
 
 #----- Cleanup -----#
