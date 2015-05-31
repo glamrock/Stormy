@@ -209,7 +209,8 @@ jabber
 function jabber {
     echo 'Installing dependencies...'
 
-# 
+# Open to ideas on replacing OpenSSL
+    apt-get install openssl -y -qq
     apt-get install ejabberd -y -qq
 
 # Double-check for broken deps before finishing up
@@ -219,16 +220,28 @@ function jabber {
 # Debian users are less nervous than Ubuntu users, but still.
     echo 'Dependencies installed!'
 
+cert 
+}
 
-################################
+function cert {  # now it's time to generate a real certificate to use with jabber
+    cd /etc/ejabberd/
+    openssl req -nodes -newkey rsa:4096 -keyout private.key -out CSR.csr -subj "/C=NL/ST=State/L=City/O=Company Name/OU=Department/CN=$hostname"
+    >| ejabberd.pem # empty the original snakeoil keyfile
+    cat private.key >> ejabberd.pem
+    cat certificate.pem >> ejabberd.pem
 
+config
+}
+
+
+function config {
 
 
 ADMIN_NAME=admin
-SRV_NAME=$(hostname)
+SRV_NAME=$(cat /var/lib/tor/jabber/hostname)
 PASS_LEN=10 # Length of the generated admin password
 # '!"#$%&()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~'\'
-PASS_CHARS=0123456789 # Characters to use when generating admin password. You can see the example for more interesting password on the previous line
+PASS_CHARS=0123456789!#$%&*+/0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_abcdefghijklmnopqrstuvwxyz
 
 # make_pass len allowed_chars
 make_pass()
@@ -382,15 +395,12 @@ Unattended-Upgrade::Allowed-Origins {
 };
 EOF
 
-#restart cron
+
+backup 
+}
 
 
-
-
-
-#################################
-
-
+function backup {
 
   mkdir /var/lib/tor/backups
 
@@ -444,7 +454,7 @@ function cleanup {
     echo "Your onion address is":  "$hostname"
     echo ""
     echo "Your hidden service's private key is located in /var/lib/tor/jabber"
-    echo Admin user "$ADMIN_NAME" on server $SRV_NAME has been created with "$pass" for a password.
+    echo "Admin user "$ADMIN_NAME" on server $SRV_NAME has been created with "$pass" for a password."
 
 
     sleep 10
@@ -461,8 +471,8 @@ function log {
   invoke-rc.d tor start
 
   echo '>>> Starting Forever service'
-  invoke-rc.d forever stop &>/dev/null
-  invoke-rc.d forever start
+  invoke-rc.d ejabberd stop &>/dev/null
+  invoke-rc.d ejabberd start
 }
 
 root #start at the beginning
