@@ -5,18 +5,18 @@ Stormy is currently under heavy development, and only usable by developers.
 Stormy
 =========
 
-*Stormy* is a wizard to help people create Tor Hidden Services with just a couple of clicks. Originally, it was setup to install Ghost (a swanky nodejs-based blog platform), but has since expanded to include Jabber, IRC, Cozy (personal cloud), and Diaspora (social media) options.
+*Stormy* is a wizard to help people create Tor Onion Services with just a couple of clicks. Originally, it was setup to install Ghost (a swanky nodejs-based blog platform), but has since expanded to include Jabber, IRC, Cozy (personal cloud), and Diaspora (social media) options.
 
 
 ##Options
 
 Running `one-click-blog.sh` will install Ghost and Tor, as well as configuring torrc and nginx.
 
-Running `stormy.sh` will guide you through several options to set up a Tor hidden service that meets your needs.
+Running `stormy.sh` will guide you through several options to set up a Tor onion service that meets your needs.
 
 There are plans to package Stormy in the future.
 
-**Reminder:** Always create hidden services on *their own machine*. ***Always***.
+**Reminder:** Always create onion sites and services on *their own machine*. ***Always***.
 
 ###Dependencies
 * Ghost

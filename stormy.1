@@ -1,32 +1,29 @@
 .TH STORMY 1	
 .SH NAME
-stormy \- install and configure tor hidden services
+stormy \- install and configure tor onion services
 .SH SYNOPSIS
 .B stormy
 [option]
 .SH DESCRIPTION
 .B stormy
-install and configure tor hidden services
+install and configure tor onion services
 .SH EXAMPLES
 .TP
 .BR stormy
 Starts Stormy's wizard to guide you through options for setup.
 .TP
 .BR "stormy --ghost"
-Installs the Ghost blogging platform and configures the hidden service.
+Installs the Ghost blogging platform and configures the onion service.
 .SH OPTIONS
 .TP
 .BR \-\-wizard
 Launches the wizard manually.
 .TP
 .BR \-g ", " \-\-ghost
-Installs the Ghost blogging platform and configures the hidden service.
+Installs the Ghost blogging platform and configures the onion service.
 .TP
 .BR \-\-cozy ", " \-\-cloud
 Sets up Cozy Cloud and all modules (calendar, tasklist, files)
-.TP
-.BR \-\-wiki ", " \-\-moinmoin
-Installs moinmoin, a collaborative wiki environment.
 .TP
 .BR \-\-rss
 Installs tt-rss reader for lightweight, censorship-resistant reading of RSS feeds.
@@ -35,13 +32,10 @@ Installs tt-rss reader for lightweight, censorship-resistant reading of RSS feed
 Installs a basic webserver with hidden service, ready for users to add their static website.
 .TP
 .BR \-t ", " \-\-tor
-Configures only the hidden service. Ideal for layering a hidden service on top of an existing website.
+Configures only the tor settings. Ideal for offering an existing website as an onion site.
 .TP
 .BR \-\-irc
 Installs and configures an IRC server (ircd-hybrid)
 .TP
 .BR \-\-jabber
 Configures ejabberd XMPP chat server for use with a client.
-.TP
-.BR "\-\-purge <nick>"
-Deletes a hidden service with a given nickname.

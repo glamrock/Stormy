@@ -8,7 +8,7 @@
 # https://github.com/glamrock/Stormy
 # 
 # Usage: 
-#   run script as root to install a blog and set it as a hidden service
+#   run script as root to install a blog and set it as an onion site
 # =========================================================================== #
 
 # CHECK IF ROOT

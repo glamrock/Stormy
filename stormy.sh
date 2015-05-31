@@ -2,13 +2,13 @@
 # -*- Mode: sh; coding: utf-8; indent-tabs-mode: nil; tab-width: 4 -*-
 # 
 # =========================================================================== #
-# Stormy, the easy hidden service creator
+# Stormy, the easy onion service creator
 # by Griffin Boyce <griffin@torproject.org>, with review from various dags
 # 
 # https://github.com/glamrock/Stormy
 # 
 # Usage: 
-#   run script as root to install a service and set it as a hidden service
+#   run script as root to install a service and set it as an onion service
 # =========================================================================== #
 
 # CHECK IF ROOT
