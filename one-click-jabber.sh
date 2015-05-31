@@ -220,15 +220,15 @@ function jabber {
 # Debian users are less nervous than Ubuntu users, but still.
     echo 'Dependencies installed!'
 
-cert 
-}
-
-function cert {  # now it's time to generate a real certificate to use with jabber
-    cd /etc/ejabberd/
-    openssl req -nodes -newkey rsa:4096 -keyout private.key -out CSR.csr -subj "/C=NL/ST=State/L=City/O=Company Name/OU=Department/CN=$hostname"
-    >| ejabberd.pem # empty the original snakeoil keyfile
-    cat private.key >> ejabberd.pem
-    cat certificate.pem >> ejabberd.pem
+#cert 
+#}
+# 
+# function cert {  # now it's time to generate a real certificate to use with jabber
+#     cd /etc/ejabberd/
+#     openssl req -nodes -newkey rsa:4096 -keyout private.key -out CSR.csr -subj "/C=NL/ST=State/L=City/O=Company Name/OU=Department/CN=$hostname"
+#     >| ejabberd.pem # empty the original snakeoil keyfile
+#     cat private.key >> ejabberd.pem
+#     cat certificate.pem >> ejabberd.pem
 
 config
 }
@@ -241,7 +241,7 @@ ADMIN_NAME=admin
 SRV_NAME=$(cat /var/lib/tor/jabber/hostname)
 PASS_LEN=10 # Length of the generated admin password
 # '!"#$%&()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~'\'
-PASS_CHARS=0123456789!#$%&*+/0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_abcdefghijklmnopqrstuvwxyz
+PASS_CHARS=0123456789!#$%&+<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_abcdefghijklmnopqrstuvwxyz
 
 # make_pass len allowed_chars
 make_pass()
@@ -407,7 +407,7 @@ function backup {
   cat <<EOF > /etc/cron.monthly/ejabberd
 #!/bin/sh
 
-sudo -u ejabberd ejabberdctl --node ejabberd backup /var/lib/tor/backups/"\${file}-jabber-\`date +%Y-%m\`.dmp"
+sudo -u ejabberd ejabberdctl --node ejabberd backup /var/lib/tor/backups/jabber.dmp
 done
 
 EOF
@@ -422,6 +422,17 @@ EOF
 
 # ensure cron scripts have execution permissions
 chmod 0755 /etc/cron.monthly/ejabberd /etc/cron.daily/ejabberd
+
+# add restore bash alias
+# to restore previous jabber users, simply type restore into a terminal
+
+if [ -f ~/.bash_aliases ]; 
+  then echo " alias restore='sudo -u ejabberd ejabberdctl --node ejabberd backup /var/lib/tor/backups/jabber.dmp'" >> ~/.bash_aliases
+  source ~/.bash_aliases
+else
+  then echo " alias restore='sudo -u ejabberd ejabberdctl --node ejabberd backup /var/lib/tor/backups/jabber.dmp'" >> ~/.bashrc
+  source ~/.bashrc
+fi
 
 # time to finish up
     cleanup
