@@ -16,7 +16,6 @@
 function root {
     if [[ `whoami` != root ]]; then
         echo "This install script should be run as root. (aka administrator)"
-#       echo "Please try again using the sudo command."
         exit;
     else
         keyfob
