@@ -324,7 +324,7 @@ function popcon {
 # not destroy the system. It is also toggled off by default: PARTICIPATE="no"
 # http://ubuntuforums.org/showthread.php?t=1654103 gives me pause.
 
-    if [ $(dpkg-query -l | grep -c popularity-contest) -ne 0 ];
+    if [ "$(dpkg-query -l | grep -c popularity-contest)" -ne 0 ];
     then
         if [[ $dist == "Debian" ]]; then
           apt-get purge popularity-contest #not a dependency for Debian
