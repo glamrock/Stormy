@@ -189,7 +189,7 @@ function popcon {
 # not destroy the system. It is also toggled off by default: PARTICIPATE="no"
 # http://ubuntuforums.org/showthread.php?t=1654103 gives me pause.
 
-    if [ $(dpkg-query -l | grep -c popularity-contest) -ne 0 ];
+    if [ "$(dpkg-query -l | grep -c popularity-contest)" -ne 0 ];
     then
         if [[ $dist == "Debian" ]]; then
           apt-get purge popularity-contest #not a dependency for Debian
@@ -430,7 +430,7 @@ if [ -f ~/.bash_aliases ];
   then echo " alias restore='sudo -u ejabberd ejabberdctl --node ejabberd backup /var/lib/tor/backups/jabber.dmp'" >> ~/.bash_aliases
   source ~/.bash_aliases
 else
-  then echo " alias restore='sudo -u ejabberd ejabberdctl --node ejabberd backup /var/lib/tor/backups/jabber.dmp'" >> ~/.bashrc
+  echo " alias restore='sudo -u ejabberd ejabberdctl --node ejabberd backup /var/lib/tor/backups/jabber.dmp'" >> ~/.bashrc
   source ~/.bashrc
 fi
 
