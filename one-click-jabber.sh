@@ -230,18 +230,18 @@ function jabber {
 #     cat private.key >> ejabberd.pem
 #     cat certificate.pem >> ejabberd.pem
 
-config
+scarecrow
 }
 
 
-function config {
+function scarecrow {
 
 
 ADMIN_NAME=admin
 SRV_NAME=$(cat /var/lib/tor/jabber/hostname)
 PASS_LEN=10 # Length of the generated admin password
 # '!"#$%&()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~'\'
-PASS_CHARS=0123456789!#$%&+<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_abcdefghijklmnopqrstuvwxyz
+PASS_CHARS="0123456789#$%&+<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_abcdefghijklmnopqrstuvwxyz"
 
 # make_pass len allowed_chars
 make_pass()
@@ -381,7 +381,7 @@ sleep 1 # Give it time to start
 pass=$(make_pass $PASS_LEN "$PASS_CHARS")
 
 #sudo ejabberdctl unregister $ADMIN_NAME $SRV_NAME
-sudo ejabberdctl register $ADMIN_NAME $SRV_NAME "$pass" || { echo "Failed to register admin" >&2; exit 1; }
+sudo ejabberdctl register "$ADMIN_NAME" "$SRV_NAME" "$pass" || { echo "Failed to register admin" >&2; exit 1; }
 
 sudo apt-get install unattended-upgrades
 cat > /etc/apt/apt.conf.d/20auto-upgrades <<EOF
@@ -465,7 +465,7 @@ function cleanup {
     echo "Your onion address is":  "$hostname"
     echo ""
     echo "Your hidden service's private key is located in /var/lib/tor/jabber"
-    echo "Admin user "$ADMIN_NAME" on server $SRV_NAME has been created with "$pass" for a password."
+    echo "Admin user $ADMIN_NAME on server $SRV_NAME has been created with $pass for a password."
 
 
     sleep 10

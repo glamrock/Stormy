@@ -14,7 +14,7 @@
 # CHECK IF ROOT
 
 function root {
-    if [[ `whoami` != root ]]; then
+    if [[ "$(whoami)" != root ]]; then
         echo "This install script should be run as root. (aka administrator)"
         exit;
     else
@@ -325,15 +325,6 @@ popcon #disable popularity contest
 
 
 
-#----- Tor Dependencies and creation -----# 
-
-function torque { # should this be initiated before the wizard?
- 
-  true 
-
-}
-
-
 
 #----- XMPP Server -----#
 
@@ -366,11 +357,12 @@ function irc {
 
     echo "Would you like to install a web-based chat client for your IRC service?"
       read -p '' IRC
-      if [ "$IRC" == "Y" ]||[ "$IRC" == "y" ]
+      if [ "$IRC" == "Y" ]||[ "$IRC" == "y" ]; then
         hstype=$(IRC)
 
-      else 
-        
+      else true 
+      
+      fi
 
 }
 
@@ -387,10 +379,10 @@ function popcon {
 
     if [ "$(dpkg-query -l | grep -c popularity-contest)" -ne 0 ];
     then     
-        if [[ `lsb_release -is` == "Debian" ]];then
+        if [[ "$(lsb_release -is)" == "Debian" ]];then
           apt-get purge popularity-contest -y -qq #not a dependency for Debian
           cleanup
-        elif [[ `lsb_release -is` == "Ubuntu" ]];then
+        elif [[ "$(lsb_release -is)" == "Ubuntu" ]];then
           sed -i '/PARTICIPATE/c\PARTICIPATE="no"' ./etc/popularity-contest.conf
           chmod -x /etc/cron.daily/popularity-contest #I need more info here
           cleanup
