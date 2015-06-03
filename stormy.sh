@@ -304,7 +304,7 @@ else
 #Log notice file /var/log/tor/notices.log
 RunAsDaemon 1 # Will run tor in the background
 
-HiddenServiceDir /var/lib/tor/ghost/
+HiddenServiceDir /var/lib/tor/"$hstype"/
 HiddenServicePort 80 127.0.0.1:80
 HiddenServicePort 2368 127.0.0.1:2368 #default ghost port
 
@@ -313,18 +313,16 @@ EOF'
 fi
 
     chown -hR debian-tor /var/lib/tor #set ownership for this folder and all subfolders to user debian-tor
-    chmod 0700 /var/lib/tor/ghost 
+    chmod 0700 /var/lib/tor/"$hstype"
 
     sed -i '/RUN_DAEMON="no"/c\RUN_DAEMON="yes"' ./etc/default/tor #allow to start on boot, even if it was previously set to no
     update-rc.d tor defaults
     echo 'Your hidden service will start on boot.'
 
+hostname=$(cat /var/lib/tor/"$hstype"/hostname) #assign $hostname for address display later
+
 popcon #disable popularity contest
-
 }
-
-
-
 
 #----- XMPP Server -----#
 
